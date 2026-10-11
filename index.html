@@ -19,8 +19,8 @@
             --border: #292929;
             --text: #f0f0f0;
             --muted: #999999;
-            --accent: #7cffb2;
-            --accent-dim: rgba(124, 255, 178, 0.08);
+            --accent: #13fe03;
+            --accent-dim: rgba(19, 254, 3, 0.08);
         }
 
         * {
@@ -71,9 +71,20 @@
         }
 
         .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
             font-size: 20px;
             font-weight: 800;
             letter-spacing: -0.7px;
+            white-space: nowrap;
+        }
+
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            display: block;
         }
 
         .brand span {
@@ -170,7 +181,8 @@
         }
 
         .button-primary:hover {
-            background: #a0ffca;
+            background: #45ff39;
+            border-color: #45ff39;
         }
 
         .button-secondary:hover {
@@ -308,7 +320,7 @@
             height: 7px;
             background: var(--accent);
             border-radius: 50%;
-            box-shadow: 0 0 10px rgba(124, 255, 178, 0.35);
+            box-shadow: 0 0 10px rgba(19, 254, 3, 0.5);
         }
 
         @media (max-width: 600px) {
@@ -318,6 +330,17 @@
 
             .navbar {
                 min-height: 68px;
+                gap: 12px;
+            }
+
+            .brand {
+                gap: 7px;
+                font-size: 17px;
+            }
+
+            .brand-logo {
+                width: 27px;
+                height: 27px;
             }
 
             nav {
@@ -367,7 +390,14 @@
     <header>
         <div class="container navbar">
             <a class="brand" href="/" aria-label="mobneutralizer home">
-                mobneutralizer<span>?</span>
+                <img
+                    class="brand-logo"
+                    src="/favicon.png"
+                    alt=""
+                    width="32"
+                    height="32"
+                >
+                <span>mobneutralizer?</span>
             </a>
 
             <nav aria-label="Main navigation">
@@ -380,7 +410,7 @@
     <main>
         <div class="container">
             <section class="hero" style="border-top: none;">
-                <p class="eyebrow">unemployed & unncontrolled</p>
+                <p class="eyebrow">unemployed &amp; unncontrolled</p>
 
                 <h1>
                     I make stuff.<br>
@@ -447,9 +477,11 @@
                     <p>
                         I'm <strong>stupid</strong>. I like taking
                         risks, and losing everythin
-                   </p>
-                        <p>i dont have a gambling problem.</p>
-                       <p> i have a gambling opportunity</p>
+                    </p>
+
+                    <p>i dont have a gambling <strong>PROBLEM</strong>.</p>
+
+                    <p>i have a gambling <strong>OPPORTUNITY</strong>.</p>
 
                     <p>
                         This site is a collection of my bad ideas: a home for

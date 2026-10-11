@@ -4,23 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>mobneutralizer</title>
-    <meta name="description" content="The personal website and project hub of MobNeutralizer. Technology, software, experiments, and other questionable ideas.">
-    <meta name="theme-color" content="#0d0d0d">
+    <title>mobneutralizer.exe</title>
+    <meta name="description" content="The personal website and project hub of MobNeutralizer. Software, experiments, and other questionable ideas.">
+    <meta name="theme-color" content="#050805">
 
     <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
     <style>
         :root {
             color-scheme: dark;
-            --background: #0d0d0d;
-            --surface: #141414;
-            --surface-hover: #1b1b1b;
-            --border: #292929;
-            --text: #f0f0f0;
-            --muted: #999999;
+            --background: #050805;
+            --surface: #090e09;
+            --surface-hover: #0d160d;
+            --border: #183318;
+            --text: #d8e8d5;
+            --muted: #82917e;
             --accent: #13fe03;
-            --accent-dim: rgba(19, 254, 3, 0.08);
+            --accent-soft: rgba(19, 254, 3, 0.09);
+            --accent-glow: rgba(19, 254, 3, 0.22);
+            --font-main: "Fira Code", "Courier New", monospace;
+            --font-display: "Share Tech Mono", "Courier New", monospace;
         }
 
         * {
@@ -31,16 +38,37 @@
 
         html {
             scroll-behavior: smooth;
+            scroll-padding-top: 90px;
         }
 
         body {
             min-height: 100vh;
-            background: var(--background);
+            background-color: var(--background);
+            background-image:
+                linear-gradient(rgba(19, 254, 3, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(19, 254, 3, 0.025) 1px, transparent 1px);
+            background-size: 36px 36px;
             color: var(--text);
-            font-family: Arial, Helvetica, sans-serif;
-            line-height: 1.6;
+            font-family: var(--font-main);
+            font-size: 13px;
+            line-height: 1.8;
             display: flex;
             flex-direction: column;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 10;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 3px,
+                rgba(0, 0, 0, 0.12) 4px
+            );
+            opacity: 0.35;
         }
 
         a {
@@ -53,13 +81,30 @@
             outline-offset: 5px;
         }
 
+        strong {
+            color: var(--accent);
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(19, 254, 3, 0.15);
+        }
+
+        ::selection {
+            color: #000;
+            background: var(--accent);
+        }
+
         .container {
             width: min(100% - 40px, 1050px);
             margin-inline: auto;
         }
 
         header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(5, 8, 5, 0.94);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
+            box-shadow: 0 3px 25px rgba(0, 0, 0, 0.4);
         }
 
         .navbar {
@@ -74,10 +119,12 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: -0.7px;
+            font-family: var(--font-display);
+            font-size: 23px;
+            color: var(--accent);
+            letter-spacing: 0.5px;
             white-space: nowrap;
+            text-shadow: 0 0 12px var(--accent-glow);
         }
 
         .brand-logo {
@@ -85,10 +132,11 @@
             height: 32px;
             object-fit: contain;
             display: block;
+            filter: drop-shadow(0 0 5px var(--accent-glow));
         }
 
-        .brand span {
-            color: var(--accent);
+        .brand-prompt {
+            color: var(--text);
         }
 
         nav {
@@ -99,12 +147,19 @@
 
         nav a {
             color: var(--muted);
-            font-size: 14px;
-            transition: color 0.2s ease;
+            font-size: 12px;
+            transition: color 0.2s ease, text-shadow 0.2s ease;
+        }
+
+        nav a::before {
+            content: "./";
+            color: var(--accent);
+            opacity: 0.6;
         }
 
         nav a:hover {
             color: var(--accent);
+            text-shadow: 0 0 10px var(--accent-glow);
         }
 
         main {
@@ -123,30 +178,50 @@
 
         .eyebrow {
             color: var(--accent);
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 2.5px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
+        }
+
+        .eyebrow::before {
+            content: "[ ";
+            color: var(--muted);
+        }
+
+        .eyebrow::after {
+            content: " ]";
+            color: var(--muted);
         }
 
         h1 {
-            font-size: clamp(44px, 8vw, 82px);
+            font-family: var(--font-display);
+            font-size: clamp(48px, 9vw, 86px);
+            font-weight: 400;
             line-height: 1.05;
-            letter-spacing: -4px;
-            max-width: 800px;
+            letter-spacing: -1px;
+            max-width: 850px;
             margin-bottom: 24px;
         }
 
         h1 .highlight {
             color: var(--accent);
+            text-shadow:
+                0 0 8px rgba(19, 254, 3, 0.5),
+                0 0 30px rgba(19, 254, 3, 0.15);
         }
 
         .hero-description {
             color: var(--muted);
-            font-size: clamp(16px, 2vw, 19px);
+            font-size: 13px;
             max-width: 580px;
             margin-bottom: 32px;
+        }
+
+        .hero-description::before {
+            content: "> ";
+            color: var(--accent);
         }
 
         .hero-actions {
@@ -161,12 +236,14 @@
             justify-content: center;
             padding: 11px 18px;
             border: 1px solid var(--border);
-            border-radius: 7px;
-            font-size: 14px;
-            font-weight: 700;
+            border-radius: 3px;
+            font-family: var(--font-main);
+            font-size: 12px;
+            font-weight: 600;
             transition:
                 background 0.2s ease,
                 border-color 0.2s ease,
+                box-shadow 0.2s ease,
                 transform 0.2s ease;
         }
 
@@ -176,18 +253,27 @@
 
         .button-primary {
             background: var(--accent);
-            color: #0d0d0d;
+            color: #020402;
             border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(19, 254, 3, 0.12);
         }
 
         .button-primary:hover {
-            background: #45ff39;
-            border-color: #45ff39;
+            background: #53ff48;
+            border-color: #53ff48;
+            box-shadow: 0 0 24px rgba(19, 254, 3, 0.3);
+        }
+
+        .button-secondary {
+            color: var(--accent);
+            border-color: #275327;
+            background: rgba(19, 254, 3, 0.025);
         }
 
         .button-secondary:hover {
-            background: var(--surface-hover);
-            border-color: #555;
+            background: var(--accent-soft);
+            border-color: var(--accent);
+            box-shadow: 0 0 16px rgba(19, 254, 3, 0.08);
         }
 
         section {
@@ -200,14 +286,23 @@
         }
 
         .section-heading h2 {
-            font-size: 25px;
-            letter-spacing: -0.8px;
+            font-family: var(--font-display);
+            font-size: 30px;
+            font-weight: 400;
+            letter-spacing: 0;
+            color: var(--accent);
             margin-bottom: 6px;
+            text-shadow: 0 0 12px rgba(19, 254, 3, 0.12);
+        }
+
+        .section-heading h2::before {
+            content: "# ";
+            color: var(--muted);
         }
 
         .section-heading p {
             color: var(--muted);
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .projects {
@@ -217,50 +312,83 @@
         }
 
         .project-card {
+            position: relative;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            min-height: 210px;
+            min-height: 220px;
             padding: 24px;
-            background: var(--surface);
+            background: rgba(9, 14, 9, 0.94);
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 3px;
             transition:
                 background 0.2s ease,
                 border-color 0.2s ease,
-                transform 0.2s ease;
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .project-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--accent);
+            opacity: 0.3;
+            transition: opacity 0.2s ease;
         }
 
         .project-card:hover {
             background: var(--surface-hover);
-            border-color: #454545;
+            border-color: #236623;
             transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+            box-shadow: 0 0 12px var(--accent-glow);
         }
 
         .project-label {
             color: var(--accent);
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
             text-transform: uppercase;
             margin-bottom: 12px;
         }
 
+        .project-label::before {
+            content: "// ";
+            color: var(--muted);
+        }
+
         .project-card h3 {
-            font-size: 21px;
+            font-family: var(--font-display);
+            font-size: 25px;
+            font-weight: 400;
+            color: var(--text);
             margin-bottom: 8px;
         }
 
         .project-card p {
             color: var(--muted);
-            font-size: 14px;
+            font-size: 12px;
             margin-bottom: 22px;
         }
 
         .project-link {
             color: var(--accent);
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 11px;
+            font-weight: 600;
             margin-top: auto;
+        }
+
+        .project-link::before {
+            content: "> ";
         }
 
         .project-link span {
@@ -273,9 +401,9 @@
         }
 
         .about-content {
-            max-width: 680px;
+            max-width: 750px;
             color: var(--muted);
-            font-size: 15px;
+            font-size: 13px;
         }
 
         .about-content p + p {
@@ -283,12 +411,19 @@
         }
 
         .about-content strong {
-            color: var(--text);
+            color: var(--accent);
+        }
+
+        .about-content p::before {
+            content: "> ";
+            color: var(--accent);
+            opacity: 0.7;
         }
 
         footer {
             border-top: 1px solid var(--border);
             padding: 24px 0;
+            background: rgba(0, 0, 0, 0.2);
         }
 
         .footer-content {
@@ -301,8 +436,8 @@
 
         footer p,
         footer a {
-            color: #777;
-            font-size: 12px;
+            color: #61705d;
+            font-size: 10px;
         }
 
         footer a:hover {
@@ -320,7 +455,20 @@
             height: 7px;
             background: var(--accent);
             border-radius: 50%;
-            box-shadow: 0 0 10px rgba(19, 254, 3, 0.5);
+            box-shadow: 0 0 10px rgba(19, 254, 3, 0.6);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 8px rgba(19, 254, 3, 0.5);
+            }
+
+            50% {
+                opacity: 0.45;
+                box-shadow: 0 0 2px rgba(19, 254, 3, 0.15);
+            }
         }
 
         @media (max-width: 600px) {
@@ -335,7 +483,7 @@
 
             .brand {
                 gap: 7px;
-                font-size: 17px;
+                font-size: 19px;
             }
 
             .brand-logo {
@@ -344,15 +492,15 @@
             }
 
             nav {
-                gap: 14px;
+                gap: 12px;
             }
 
             nav a {
-                font-size: 12px;
+                font-size: 10px;
             }
 
             h1 {
-                letter-spacing: -2px;
+                font-size: clamp(43px, 11vw, 65px);
             }
 
             .hero {
@@ -366,7 +514,7 @@
             }
 
             .project-card {
-                min-height: 185px;
+                min-height: 190px;
             }
 
             section {
@@ -379,8 +527,8 @@
             *::before,
             *::after {
                 scroll-behavior: auto !important;
+                animation: none !important;
                 transition-duration: 0.01ms !important;
-                animation-duration: 0.01ms !important;
             }
         }
     </style>
@@ -397,7 +545,7 @@
                     width="32"
                     height="32"
                 >
-                <span>mobneutralizer?</span>
+                <span class="brand-prompt">mobneutralizer<span>?</span></span>
             </a>
 
             <nav aria-label="Main navigation">
@@ -410,7 +558,7 @@
     <main>
         <div class="container">
             <section class="hero" style="border-top: none;">
-                <p class="eyebrow">unemployed &amp; uncontrolled</p>
+                <p class="eyebrow">unemployed &amp; unncontrolled</p>
 
                 <h1>
                     I make stuff.<br>
@@ -476,7 +624,7 @@
                 <div class="about-content">
                     <p>
                         I'm <strong>stupid</strong>. I like taking
-                        risks, and losing everything
+                        risks, and losing everythin
                     </p>
 
                     <p>i dont have a gambling <strong>PROBLEM</strong>.</p>

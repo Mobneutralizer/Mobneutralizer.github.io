@@ -5,92 +5,472 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>mobneutralizer</title>
+    <meta name="description" content="The personal website and project hub of MobNeutralizer. Technology, software, experiments, and other questionable ideas.">
+    <meta name="theme-color" content="#0d0d0d">
+
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <style>
+        :root {
+            color-scheme: dark;
+            --background: #0d0d0d;
+            --surface: #141414;
+            --surface-hover: #1b1b1b;
+            --border: #292929;
+            --text: #f0f0f0;
+            --muted: #999999;
+            --accent: #7cffb2;
+            --accent-dim: rgba(124, 255, 178, 0.08);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            background: #0d0d0d;
-            color: #f0f0f0;
-            font-family: Arial, Helvetica, sans-serif;
             min-height: 100vh;
+            background: var(--background);
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.6;
             display: flex;
             flex-direction: column;
         }
 
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        a:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 5px;
+        }
+
+        .container {
+            width: min(100% - 40px, 1050px);
+            margin-inline: auto;
+        }
+
         header {
-            padding: 24px 40px;
-            border-bottom: 1px solid #252525;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .navbar {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .brand {
             font-size: 20px;
-            font-weight: bold;
-            letter-spacing: 1px;
+            font-weight: 800;
+            letter-spacing: -0.7px;
+        }
+
+        .brand span {
+            color: var(--accent);
+        }
+
+        nav {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--muted);
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent);
         }
 
         main {
             flex: 1;
+        }
+
+        .hero {
+            min-height: 490px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 30px;
+            align-items: flex-start;
+            padding-top: 80px;
+            padding-bottom: 80px;
+        }
+
+        .eyebrow {
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
         }
 
         h1 {
-            font-size: clamp(32px, 6vw, 60px);
-            margin-bottom: 16px;
+            font-size: clamp(44px, 8vw, 82px);
+            line-height: 1.05;
+            letter-spacing: -4px;
+            max-width: 800px;
+            margin-bottom: 24px;
         }
 
-        p {
-            color: #999;
-            font-size: 18px;
+        h1 .highlight {
+            color: var(--accent);
+        }
+
+        .hero-description {
+            color: var(--muted);
+            font-size: clamp(16px, 2vw, 19px);
+            max-width: 580px;
+            margin-bottom: 32px;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 11px 18px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            font-size: 14px;
+            font-weight: 700;
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button-primary {
+            background: var(--accent);
+            color: #0d0d0d;
+            border-color: var(--accent);
+        }
+
+        .button-primary:hover {
+            background: #a0ffca;
+        }
+
+        .button-secondary:hover {
+            background: var(--surface-hover);
+            border-color: #555;
+        }
+
+        section {
+            padding: 50px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-heading {
+            margin-bottom: 24px;
+        }
+
+        .section-heading h2 {
+            font-size: 25px;
+            letter-spacing: -0.8px;
+            margin-bottom: 6px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .project-card {
+            display: flex;
+            flex-direction: column;
+            min-height: 210px;
+            padding: 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .project-card:hover {
+            background: var(--surface-hover);
+            border-color: #454545;
+            transform: translateY(-3px);
+        }
+
+        .project-label {
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .project-card h3 {
+            font-size: 21px;
+            margin-bottom: 8px;
+        }
+
+        .project-card p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        .project-link {
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 700;
+            margin-top: auto;
+        }
+
+        .project-link span {
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+
+        .project-card:hover .project-link span {
+            transform: translateX(4px);
+        }
+
+        .about-content {
+            max-width: 680px;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .about-content p + p {
+            margin-top: 14px;
+        }
+
+        .about-content strong {
+            color: var(--text);
         }
 
         footer {
-            padding: 20px;
-            text-align: center;
-            color: #777;
-            font-size: 14px;
+            border-top: 1px solid var(--border);
+            padding: 24px 0;
         }
 
-        footer p {
-            margin-bottom: 8px;
-            font-size: 14px;
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
+        footer p,
         footer a {
-            color: #7cffb2;
-            text-decoration: none;
+            color: #777;
+            font-size: 12px;
         }
 
         footer a:hover {
-            text-decoration: underline;
+            color: var(--accent);
+        }
+
+        .footer-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(124, 255, 178, 0.35);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: min(100% - 32px, 1050px);
+            }
+
+            .navbar {
+                min-height: 68px;
+            }
+
+            nav {
+                gap: 14px;
+            }
+
+            nav a {
+                font-size: 12px;
+            }
+
+            h1 {
+                letter-spacing: -2px;
+            }
+
+            .hero {
+                min-height: 420px;
+                padding-top: 60px;
+                padding-bottom: 60px;
+            }
+
+            .projects {
+                grid-template-columns: 1fr;
+            }
+
+            .project-card {
+                min-height: 185px;
+            }
+
+            section {
+                padding: 38px 0;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
 
 <body>
     <header>
-        mobneutralizer
+        <div class="container navbar">
+            <a class="brand" href="/" aria-label="mobneutralizer home">
+                mobneutralizer<span>.</span>
+            </a>
+
+            <nav aria-label="Main navigation">
+                <a href="#projects">Projects</a>
+                <a href="#about">About</a>
+            </nav>
+        </div>
     </header>
 
     <main>
-        <h1>Hey, I'm still workin' on it.</h1>
-        <p>Come back later.</p>
+        <div class="container">
+            <section class="hero" style="border-top: none;">
+                <p class="eyebrow">Independent tinkering & development</p>
+
+                <h1>
+                    I make things.<br>
+                    <span class="highlight">Sometimes useful.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Software, technology, experiments, and ideas that
+                    probably started with me asking, "Could I actually build that?"
+                </p>
+
+                <div class="hero-actions">
+                    <a class="button button-primary" href="#projects">
+                        Explore my projects
+                    </a>
+
+                    <a class="button button-secondary"
+                       href="https://github.com/"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        GitHub ↗
+                    </a>
+                </div>
+            </section>
+
+            <section id="projects">
+                <div class="section-heading">
+                    <h2>Projects</h2>
+                    <p>A collection of things I'm building, exploring, or working on.</p>
+                </div>
+
+                <div class="projects">
+                    <a class="project-card"
+                       href="https://calixas.mobneutralizer.com">
+                        <span class="project-label">Research & policy</span>
+                        <h3>Calixas</h3>
+                        <p>
+                            An exploration of a hypothetical California–Texas
+                            merger: the arguments, the obstacles, and the numbers
+                            behind the idea.
+                        </p>
+                        <span class="project-link">
+                            Visit Calixas <span>→</span>
+                        </span>
+                    </a>
+
+                    <div class="project-card">
+                        <span class="project-label">In development</span>
+                        <h3>More coming soon</h3>
+                        <p>
+                            Other experiments and projects will find their
+                            way here as they become ready to share.
+                        </p>
+                        <span class="project-link">Work in progress</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="about">
+                <div class="section-heading">
+                    <h2>About</h2>
+                    <p>Curiosity is a perfectly good reason to start building.</p>
+                </div>
+
+                <div class="about-content">
+                    <p>
+                        I'm <strong>MobNeutralizer</strong>. I like taking
+                        interesting problems apart, figuring out how they work,
+                        and seeing what I can build from the pieces.
+                    </p>
+
+                    <p>
+                        This site is my corner of the internet: a home for
+                        projects, experiments, and ideas that deserve somewhere
+                        more permanent than a browser tab.
+                    </p>
+                </div>
+            </section>
+        </div>
     </main>
 
     <footer>
-        <p>
-            Other projects:
-            <a href="https://calixas.mobneutralizer.com">Calixas</a>
-        </p>
+        <div class="container footer-content">
+            <p>&copy; 2026 mobneutralizer. Built by me.</p>
 
-        <p>&copy; 2026 mobneutralizer</p>
+            <div class="footer-status">
+                <span class="status-dot" aria-hidden="true"></span>
+                <p>Always a work in progress</p>
+            </div>
+        </div>
     </footer>
 </body>
 </html>

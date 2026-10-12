@@ -171,18 +171,17 @@
 
   <script>
     /*
-      GISCUS SETUP:
-      1. Enable Discussions on your public website repository.
-      2. Install the Giscus GitHub App on that repository.
-      3. Visit https://giscus.app, select your repo and a discussion category.
-      4. Copy the repo, repoId, category, and categoryId values below.
-      Until those values are set, the post reader works but comments show setup instructions.
+      GISCUS CONFIGURATION:
+      The repository and General category values have been supplied.
+      Each manifesto post uses a unique Giscus discussion term so comments stay separate per post.
     */
     const GISCUS_CONFIG = {
-      repo: "YOUR_GITHUB_USERNAME/YOUR_WEBSITE_REPOSITORY",
-      repoId: "YOUR_REPOSITORY_ID",
-      category: "Comments",
-      categoryId: "YOUR_CATEGORY_ID"
+      // Giscus configuration supplied by you.
+      repo: "mobneutralizer/mobneutralizer.github.io",
+      repoId: "R_kgDOVFRxsA",
+      category: "General",
+      categoryId: "DIC_kwDOVFRxsM4DH0AJ",
+      theme: "preferred_color_scheme"
     };
 
     const listEl = document.getElementById("post-list");
@@ -306,7 +305,11 @@
     }
 
     function commentsSetupNeeded() {
-      return !GISCUS_CONFIG.repo || GISCUS_CONFIG.repo.includes("YOUR_") || !GISCUS_CONFIG.repoId || GISCUS_CONFIG.repoId.includes("YOUR_") || !GISCUS_CONFIG.category || !GISCUS_CONFIG.categoryId || GISCUS_CONFIG.categoryId.includes("YOUR_");
+      const isPlaceholder = value => {
+        const text = String(value ?? "").trim();
+        return !text || /YOUR_|ENTER CATEGORY|ENTER REPO|\[ENTER|PLACEHOLDER/i.test(text);
+      };
+      return [GISCUS_CONFIG.repo, GISCUS_CONFIG.repoId, GISCUS_CONFIG.category, GISCUS_CONFIG.categoryId].some(isPlaceholder);
     }
 
     function loadComments(post) {
@@ -326,14 +329,16 @@
         "data-repo-id": GISCUS_CONFIG.repoId,
         "data-category": GISCUS_CONFIG.category,
         "data-category-id": GISCUS_CONFIG.categoryId,
+        // Posts are hash-routed under the same /manifesto/ pathname, so use a unique term per post.
         "data-mapping": "specific",
         "data-term": `manifesto-${post.slug}`,
-        "data-strict": "1",
+        "data-strict": "0",
         "data-reactions-enabled": "1",
-        "data-emit-metadata": "0",
+        "data-emit-metadata": "1",
         "data-input-position": "top",
-        "data-theme": "dark",
-        "data-lang": "en"
+        "data-theme": GISCUS_CONFIG.theme || "preferred_color_scheme",
+        "data-lang": "en",
+        "data-loading": "lazy"
       };
       Object.entries(attrs).forEach(([name, value]) => script.setAttribute(name, value));
       holder.appendChild(script);

@@ -1,0 +1,269 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Arcade | MobNeutralizer</title>
+    <meta name="description" content="The MobNeutralizer Arcade — a collection of browser games and interactive projects.">
+    <meta name="theme-color" content="#0a0a0a">
+
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --panel: #111411;
+            --green: #39ff14;
+            --green-dim: #1b8f13;
+            --text: #e0e0e0;
+            --muted: #888888;
+            --border: #263326;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: "Courier New", monospace;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        header {
+            padding: 24px 8%;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            color: var(--green);
+            font-size: 1.25rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        nav {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--muted);
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--green);
+        }
+
+        main {
+            width: min(100% - 40px, 1000px);
+            margin: 0 auto;
+            padding: 80px 0;
+            flex: 1;
+        }
+
+        .eyebrow {
+            color: var(--green);
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            color: var(--green);
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
+
+        .intro {
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.8;
+            max-width: 650px;
+            margin-bottom: 56px;
+        }
+
+        .section-heading {
+            font-size: 1rem;
+            color: var(--text);
+            margin-bottom: 20px;
+        }
+
+        .section-heading span {
+            color: var(--green);
+        }
+
+        .games {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .game-card {
+            display: flex;
+            flex-direction: column;
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 26px;
+            min-height: 240px;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .game-card:hover {
+            border-color: var(--green);
+            transform: translateY(-4px);
+        }
+
+        .game-icon {
+            font-size: 2rem;
+            color: var(--green);
+            margin-bottom: 20px;
+        }
+
+        .game-card h3 {
+            color: var(--green);
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        .game-card p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .play-link {
+            color: var(--green);
+            margin-top: auto;
+            font-weight: bold;
+        }
+
+        .play-link:hover {
+            text-decoration: underline;
+        }
+
+        .status {
+            color: var(--muted);
+            font-size: 0.75rem;
+            margin-top: 10px;
+        }
+
+        footer {
+            padding: 24px 8%;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        footer a:hover {
+            color: var(--green);
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 20px;
+            }
+
+            nav {
+                gap: 16px;
+            }
+
+            main {
+                padding: 55px 0;
+            }
+
+            footer {
+                padding: 20px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                transition: none !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a class="logo" href="/">MobNeutralizer</a>
+
+        <nav aria-label="Main navigation">
+            <a href="/">Home</a>
+            <a href="/projects/">Projects</a>
+            <a href="/arcade/">Arcade</a>
+        </nav>
+    </header>
+
+    <main>
+        <p class="eyebrow">// PROJECT HUB / ARCADE</p>
+
+        <h1>THE ARCADE</h1>
+
+        <p class="intro">
+            Welcome to the MobNeutralizer Arcade.
+            A collection of games, experiments, and interactive projects
+            built for the browser. Pick a game, open it up, and play.
+        </p>
+
+        <section aria-labelledby="games-heading">
+            <h2 class="section-heading" id="games-heading">
+                <span>[01]</span> AVAILABLE GAMES
+            </h2>
+
+            <div class="games">
+                <a class="game-card" href="/main/arcade/snake/index.html">
+                    <div class="game-icon" aria-hidden="true">&gt;_</div>
+
+                    <h3>Snake</h3>
+
+                    <p>
+                        Eat, grow, and survive. A classic arcade game
+                        brought to the MobNeutralizer project hub.
+                    </p>
+
+                    <span class="play-link">[ PLAY GAME → ]</span>
+                    <span class="status">STATUS: AVAILABLE</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <span>© <span id="year"></span> MobNeutralizer</span>
+        <a href="https://mobneutralizer.com">mobneutralizer.com ↗</a>
+    </footer>
+
+    <script>
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+    </script>
+</body>
+</html>
+```

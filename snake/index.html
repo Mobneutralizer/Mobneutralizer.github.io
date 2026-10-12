@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080b08">
+<title>Snake // MobNeutralizer</title>
+<link rel="icon" href="../favicon.png" type="image/png">
+<style>
+:root{color-scheme:dark;--bg:#080b08;--panel:#0d120d;--green:#13fe03;--dim:#0b8c08;--text:#d9f7d6;--muted:#7c9b79;--line:#1c3d1a}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;padding:24px;background:radial-gradient(ellipse at 50% 0%,rgba(19,254,3,.07),transparent 48%),var(--bg);color:var(--text);font-family:"Fira Code","Cascadia Code",Consolas,monospace}
+.shell{width:min(980px,100%);margin:auto}header{display:flex;justify-content:space-between;gap:16px;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:24px}.brand{color:var(--green);font-size:13px;letter-spacing:.08em}.back{color:var(--muted);font-size:12px;text-decoration:none}.back:hover{color:var(--green)}
+h1{color:var(--green);font-size:clamp(27px,5vw,46px);line-height:1.05;letter-spacing:-.06em;margin:0 0 10px;text-shadow:0 0 22px #13fe031f}.subtitle{color:var(--muted);font-size:13px;margin:0;line-height:1.6}.topline{margin-bottom:24px}
+.game-panel{border:1px solid var(--line);background:rgba(13,18,13,.9);padding:14px;box-shadow:0 0 40px #0004}.hud{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;font-size:12px;color:var(--muted)}.score strong{color:var(--green);font-weight:600}.status{color:var(--green)}
+.canvas-wrap{position:relative;width:100%}canvas{display:block;width:100%;height:auto;aspect-ratio:1.3/1;background:#060906;border:1px solid #193317;image-rendering:pixelated;outline:none}
+.overlay{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:20px;background:#050805bd}.overlay[hidden]{display:none}.overlay-box{max-width:360px}.overlay h2{color:var(--green);font-size:22px;margin:0 0 10px}.overlay p{font-size:12px;line-height:1.7;margin:0 0 16px}
+button{font:inherit;font-size:12px;color:var(--green);cursor:pointer;background:#0a1709;border:1px solid var(--dim);padding:10px 14px}button:hover,button:focus-visible{background:#10260e;border-color:var(--green);outline:none}
+.controls{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:14px}.button-group{display:flex;gap:8px;flex-wrap:wrap}.help{color:var(--muted);font-size:11px;line-height:1.7}.mobile-pad{display:none;grid-template-columns:repeat(3,42px);grid-template-rows:repeat(2,38px);gap:5px;margin:12px auto 0;width:max-content}.mobile-pad button{padding:0;font-size:15px}.mobile-pad .up{grid-column:2;grid-row:1}.mobile-pad .left{grid-column:1;grid-row:2}.mobile-pad .down{grid-column:2;grid-row:2}.mobile-pad .right{grid-column:3;grid-row:2}footer{color:#486346;font-size:10px;margin-top:20px;text-align:center}
+@media(max-width:620px){body{padding:16px 12px}header{margin-bottom:20px}.game-panel{padding:8px}.mobile-pad{display:grid}.controls{align-items:flex-start}.help{width:100%}}
+</style>
+</head>
+<body>
+<main class="shell">
+<header><div class="brand">MOBNEUTRALIZER // ARCADE</div><a class="back" href="../">← back to site</a></header>
+<section class="topline"><h1>SNAKE<span style="color:var(--text)">.EXE</span></h1><p class="subtitle">Eat the signal. Grow the chain. Don't hit yourself.</p></section>
+<section class="game-panel" aria-label="Snake game">
+<div class="hud"><div class="score">SCORE: <strong id="score">0000</strong></div><div class="score">BEST: <strong id="best">0000</strong></div><div class="status" id="status">● READY</div></div>
+<div class="canvas-wrap"><canvas id="game" width="780" height="600" tabindex="0" aria-label="Snake game board"></canvas>
+<div class="overlay" id="overlay"><div class="overlay-box"><h2 id="overlay-title">READY?</h2><p id="overlay-copy">Every segment of the snake is your favicon.png.<br>Use arrow keys or WASD to move.</p><button id="start">START GAME</button></div></div></div>
+<div class="mobile-pad" aria-label="Touch controls"><button class="up" data-dir="up" aria-label="Up">▲</button><button class="left" data-dir="left" aria-label="Left">◀</button><button class="down" data-dir="down" aria-label="Down">▼</button><button class="right" data-dir="right" aria-label="Right">▶</button></div>
+<div class="controls"><div class="button-group"><button id="pause">PAUSE [P]</button><button id="restart">RESTART [R]</button></div><div class="help">MOVE: ↑ ↓ ← → / W A S D<br>PAUSE: P &nbsp; RESTART: R</div></div>
+</section><footer>NO TRACKING // LOCAL SCORE ONLY // HAVE FUN</footer>
+</main>
+<script>
+(() => {
+"use strict";
+const canvas=document.getElementById("game"),ctx=canvas.getContext("2d");
+const scoreEl=document.getElementById("score"),bestEl=document.getElementById("best"),statusEl=document.getElementById("status");
+const overlay=document.getElementById("overlay"),overlayTitle=document.getElementById("overlay-title"),overlayCopy=document.getElementById("overlay-copy"),startBtn=document.getElementById("start");
+const COLS=26,ROWS=20,CELL=canvas.width/COLS,STEP_MS=115,icon=new Image();
+icon.src="../favicon.png";
+let snake,direction,nextDirection,food,score,best,running,gameOver,lastStep,raf;
+try{best=Number(localStorage.getItem("mn-snake-best")||0)}catch(_){best=0}
+bestEl.textContent=String(best).padStart(4,"0");
+function spawnFood(){let p;do{p={x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)}}while(snake&&snake.some(s=>s.x===p.x&&s.y===p.y));return p}
+function reset(){
+ snake=[{x:8,y:10},{x:7,y:10},{x:6,y:10},{x:5,y:10},{x:4,y:10}];
+ direction={x:1,y:0};nextDirection={x:1,y:0};score=0;scoreEl.textContent="0000";food=spawnFood();
+ running=false;gameOver=false;lastStep=0;statusEl.textContent="● READY";
+ overlayTitle.textContent="READY?";overlayCopy.innerHTML="Every segment of the snake is your favicon.png.<br>Use arrow keys or WASD to move.";
+ startBtn.textContent="START GAME";overlay.hidden=false;draw();
+}
+function setDirection(x,y){if(x===-direction.x&&y===-direction.y)return;nextDirection={x,y};if(!running&&!gameOver)startGame()}
+function startGame(){if(gameOver)reset();running=true;overlay.hidden=true;statusEl.textContent="● RUNNING";canvas.focus({preventScroll:true});lastStep=0;cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}
+function pauseGame(){if(gameOver)return;if(running){running=false;cancelAnimationFrame(raf);statusEl.textContent="● PAUSED";overlayTitle.textContent="PAUSED";overlayCopy.textContent="Take a breath. Your snake is waiting.";startBtn.textContent="RESUME";overlay.hidden=false}else startGame()}
+function endGame(won=false){running=false;gameOver=true;cancelAnimationFrame(raf);statusEl.textContent=won?"● BOARD CLEARED":"● GAME OVER";overlayTitle.textContent=won?"BOARD CLEARED":"SIGNAL LOST";overlayCopy.textContent=won?"You filled the entire board. That's ridiculous.":`Final score: ${score}. Try again?`;startBtn.textContent="PLAY AGAIN";overlay.hidden=false}
+function tick(){
+ direction=nextDirection;const head={x:snake[0].x+direction.x,y:snake[0].y+direction.y},eating=head.x===food.x&&head.y===food.y,body=eating?snake:snake.slice(0,-1);
+ if(head.x<0||head.x>=COLS||head.y<0||head.y>=ROWS||body.some(s=>s.x===head.x&&s.y===head.y)){endGame();return}
+ snake.unshift(head);
+ if(eating){score+=10;scoreEl.textContent=String(score).padStart(4,"0");if(score>best){best=score;bestEl.textContent=String(best).padStart(4,"0");try{localStorage.setItem("mn-snake-best",String(best))}catch(_){}}
+ if(snake.length===COLS*ROWS){draw();endGame(true);return}food=spawnFood()}else snake.pop();
+}
+function draw(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle="#060906";ctx.fillRect(0,0,canvas.width,canvas.height);
+ ctx.strokeStyle="rgba(19,254,3,.055)";ctx.lineWidth=1;
+ for(let x=0;x<=canvas.width;x+=CELL){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke()}
+ for(let y=0;y<=canvas.height;y+=CELL){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke()}
+ const fx=food.x*CELL,fy=food.y*CELL;ctx.fillStyle="rgba(19,254,3,.12)";ctx.fillRect(fx+4,fy+4,CELL-8,CELL-8);ctx.strokeStyle="#13fe03";ctx.lineWidth=2;ctx.strokeRect(fx+5,fy+5,CELL-10,CELL-10);
+ ctx.beginPath();ctx.moveTo(fx+CELL/2,fy+9);ctx.lineTo(fx+CELL/2,fy+CELL-9);ctx.moveTo(fx+9,fy+CELL/2);ctx.lineTo(fx+CELL-9,fy+CELL/2);ctx.stroke();
+ // Each segment is rendered from the same favicon.png.
+ snake.forEach((part,i)=>{const x=part.x*CELL,y=part.y*CELL,inset=i===0?1:2;if(icon.complete&&icon.naturalWidth>0)ctx.drawImage(icon,x+inset,y+inset,CELL-inset*2,CELL-inset*2);else{ctx.fillStyle=i===0?"#13fe03":"#0b8c08";ctx.fillRect(x+2,y+2,CELL-4,CELL-4)}if(i===0){ctx.strokeStyle="rgba(217,247,214,.85)";ctx.lineWidth=1;ctx.strokeRect(x+1.5,y+1.5,CELL-3,CELL-3)}});
+}
+function loop(t){if(!running)return;if(!lastStep)lastStep=t;if(t-lastStep>=STEP_MS){tick();draw();lastStep=t;if(!running)return}raf=requestAnimationFrame(loop)}
+const keys={ArrowUp:[0,-1],w:[0,-1],W:[0,-1],ArrowDown:[0,1],s:[0,1],S:[0,1],ArrowLeft:[-1,0],a:[-1,0],A:[-1,0],ArrowRight:[1,0],d:[1,0],D:[1,0]};
+document.addEventListener("keydown",e=>{if(keys[e.key]){e.preventDefault();setDirection(...keys[e.key])}else if(e.key.toLowerCase()==="p"){e.preventDefault();pauseGame()}else if(e.key.toLowerCase()==="r"){e.preventDefault();reset();startGame()}else if(e.key==="Enter"&&!running)startGame()});
+document.querySelectorAll("[data-dir]").forEach(b=>b.addEventListener("click",()=>{const d={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};setDirection(...d[b.dataset.dir])}));
+startBtn.addEventListener("click",startGame);document.getElementById("pause").addEventListener("click",pauseGame);document.getElementById("restart").addEventListener("click",()=>{reset();startGame()});
+icon.addEventListener("load",draw);icon.addEventListener("error",()=>console.warn("Could not load ../favicon.png. Check the relative path."));
+reset();
+})();
+</script>
+</body>
+</html>

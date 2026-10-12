@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050805">
+
+    <title>Portfolio — mobneutralizer</title>
+    <meta name="description" content="Projects, experiments, creations, and questionable decisions by mobneutralizer.">
+
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #050805;
+            --surface: #090e09;
+            --surface-hover: #0d160d;
+            --border: #183318;
+            --border-bright: #285528;
+            --text: #d8e8d5;
+            --muted: #82917e;
+            --accent: #13fe03;
+            --accent-dim: rgba(19, 254, 3, 0.08);
+            --glow: rgba(19, 254, 3, 0.18);
+            --danger: #ff5555;
+            --font: "Fira Code", monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-color: var(--border-bright) var(--bg);
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 14px;
+            line-height: 1.75;
+            overflow-wrap: anywhere;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(19, 254, 3, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(19, 254, 3, 0.025) 1px, transparent 1px);
+            background-size: 36px 36px;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 10;
+            pointer-events: none;
+            opacity: 0.12;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 3px,
+                rgba(0, 0, 0, 0.22) 4px
+            );
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.2s, text-shadow 0.2s;
+        }
+
+        a:hover {
+            color: #83ff7b;
+            text-shadow: 0 0 10px var(--glow);
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        button {
+            color: inherit;
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        a:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 4px;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .container {
+            width: min(1100px, calc(100% - 40px));
+            margin-inline: auto;
+        }
+
+        .accent {
+            color: var(--accent);
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .site-header {
+            border-bottom: 1px solid var(--border);
+            background: rgba(5, 8, 5, 0.92);
+        }
+
+        .header-inner {
+            min-height: 76px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text);
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: -0.7px;
+        }
+
+        .brand img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .brand span span {
+            color: var(--accent);
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 22px;
+            font-size: 12px;
+        }
+
+        .header-nav a {
+            color: var(--muted);
+        }
+
+        .header-nav a:hover {
+            color: var(--accent);
+        }
+
+        .hero {
+            padding: 82px 0 48px;
+        }
+
+        .eyebrow {
+            margin: 0 0 14px;
+            color: var(--accent);
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin-top: 0;
+        }
+
+        h1 {
+            margin-bottom: 18px;
+            font-family: "Share Tech Mono", var(--font);
+            font-size: clamp(38px, 7vw, 68px);
+            font-weight: 400;
+            line-height: 1.12;
+            letter-spacing: -2px;
+        }
+
+        h1 .highlight {
+            color: var(--accent);
+            text-shadow: 0 0 24px var(--glow);
+        }
+
+        .hero-description {
+            max-width: 680px;
+            margin-bottom: 25px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .terminal-line {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .terminal-line .prompt {
+            color: var(--accent);
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            font-family: "Share Tech Mono", var(--font);
+            font-size: 27px;
+            font-weight: 400;
+        }
+
+        .section-heading p {
+            margin: 5px 0 0;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .search-wrap {
+            position: relative;
+            flex: 1 1 220px;
+        }
+
+        .search-wrap::before {
+            content: ">";
+            position: absolute;
+            top: 50%;
+            left: 14px;
+            color: var(--accent);
+            transform: translateY(-50%);
+        }
+
+        .search-input {
+            width: 100%;
+            min-height: 44px;
+            padding: 10px 14px 10px 32px;
+            color: var(--text);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        .search-input::placeholder {
+            color: #596756;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 2px var(--accent-dim);
+        }
+
+        .filter-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .filter-button {
+            min-height: 42px;
+            padding: 8px 13px;
+            cursor: pointer;
+            color: var(--muted);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+
+        .filter-button:hover {
+            color: var(--accent);
+            border-color: var(--border-bright);
+        }
+
+        .filter-button.active {
+            color: var(--accent);
+            background: var(--accent-dim);
+            border-color: var(--accent);
+            box-shadow: 0 0 12px var(--glow);
+        }
+
+        .gallery-section {
+            padding-bottom: 90px;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .project-card {
+            min-width: 0;
+            overflow: hidden;
+            background: rgba(9, 14, 9, 0.94);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            animation: appear 0.35s ease both;
+        }
+
+        .project-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-bright);
+            box-shadow: 0 8px 30px rgba(19, 254, 3, 0.06);
+        }
+
+        .project-preview {
+            position: relative;
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            overflow: hidden;
+            padding: 0;
+            cursor: pointer;
+            background: #070b07;
+            border: 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .project-preview img,
+        .project-preview video {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.35s;
+        }
+
+        .project-card:hover .project-preview img {
+            transform: scale(1.035);
+        }
+
+        .project-preview .placeholder {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 12px;
+            background:
+                linear-gradient(135deg, transparent 49.5%, var(--border) 50%, transparent 50.5%),
+                linear-gradient(45deg, transparent 49.5%, var(--border) 50%, transparent 50.5%);
+            background-size: 28px 28px;
+        }
+
+        .placeholder-symbol {
+            color: var(--accent);
+            font-size: 36px;
+            text-shadow: 0 0 15px var(--glow);
+        }
+
+        .media-count {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            padding: 3px 7px;
+            color: var(--accent);
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid var(--border-bright);
+            border-radius: 3px;
+            font-size: 10px;
+        }
+
+        .project-info {
+            padding: 18px;
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .category-tag {
+            display: inline-block;
+            max-width: 100%;
+            padding: 2px 7px;
+            color: var(--accent);
+            background: var(--accent-dim);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            font-size: 10px;
+            line-height: 1.8;
+        }
+
+        .project-date {
+            flex-shrink: 0;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .project-title {
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .project-description {
+            margin-bottom: 15px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        .project-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .text-action {
+            padding: 0;
+            cursor: pointer;
+            color: var(--accent);
+            background: transparent;
+            border: 0;
+            font-size: 11px;
+        }
+
+        .text-action:hover {
+            color: #83ff7b;
+            text-shadow: 0 0 8px var(--glow);
+        }
+
+        .text-action::before {
+            content: "> ";
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            padding: 55px 20px;
+            text-align: center;
+            background: var(--surface);
+            border: 1px dashed var(--border-bright);
+            border-radius: 5px;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 8px;
+            color: var(--accent);
+            font-size: 16px;
+        }
+
+        .empty-state p {
+            margin-bottom: 0;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .status-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 25px;
+            padding: 12px 0;
+            color: var(--muted);
+            border-top: 1px solid var(--border);
+            font-size: 11px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            margin-right: 7px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--glow);
+            animation: pulse 2s infinite;
+        }
+
+        .site-footer {
+            border-top: 1px solid var(--border);
+            background: rgba(5, 8, 5, 0.92);
+        }
+
+        .footer-inner {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 25px 0;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        /* Media lightbox */
+
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: rgba(0, 0, 0, 0.94);
+        }
+
+        .lightbox.open {
+            display: flex;
+        }
+
+        .lightbox-content {
+            display: flex;
+            width: min(1100px, 100%);
+            max-height: 90vh;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .lightbox-media {
+            display: block;
+            max-width: 100%;
+            max-height: 76vh;
+            object-fit: contain;
+            border: 1px solid var(--border-bright);
+            box-shadow: 0 0 35px rgba(19, 254, 3, 0.06);
+        }
+
+        .lightbox-caption {
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .lightbox-close {
+            position: fixed;
+            top: 18px;
+            right: 24px;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            color: var(--accent);
+            background: var(--surface);
+            border: 1px solid var(--border-bright);
+            border-radius: 4px;
+            font-size: 25px;
+        }
+
+        .lightbox-close:hover {
+            background: var(--accent-dim);
+        }
+
+        .lightbox-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .lightbox-nav button {
+            min-width: 90px;
+            padding: 7px 12px;
+            cursor: pointer;
+            color: var(--accent);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            font-size: 11px;
+        }
+
+        .lightbox-nav button:disabled {
+            cursor: not-allowed;
+            opacity: 0.3;
+        }
+
+        .lightbox-nav button:not(:disabled):hover {
+            border-color: var(--accent);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 850px) {
+            .project-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .hero {
+                padding-top: 60px;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .container {
+                width: min(100% - 28px, 1100px);
+            }
+
+            .header-inner {
+                min-height: 68px;
+                align-items: flex-start;
+                flex-direction: column;
+                justify-content: center;
+                gap: 8px;
+                padding: 12px 0;
+            }
+
+            .header-nav {
+                gap: 15px;
+            }
+
+            .hero {
+                padding-top: 48px;
+            }
+
+            h1 {
+                letter-spacing: -1px;
+            }
+
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .toolbar {
+                flex-direction: column;
+            }
+
+            .filter-list {
+                gap: 6px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+            }
+
+            .lightbox {
+                padding: 12px;
+            }
+
+            .lightbox-close {
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="/" aria-label="mobneutralizer home">
+                <img src="/favicon.png" alt="" width="32" height="32">
+                <span>mobneutralizer<span>?</span></span>
+            </a>
+
+            <nav class="header-nav" aria-label="Main navigation">
+                <a href="/">Home</a>
+                <a href="#projects">Projects</a>
+                <a href="https://github.com/" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="container hero">
+            <p class="eyebrow">./portfolio --list-all</p>
+
+            <h1>
+                Things I've <span class="highlight">made.</span>
+            </h1>
+
+            <p class="hero-description">
+                Projects, experiments, designs, code, videos, and other
+                questionable uses of my time. Some work. Some don't.
+                That's kind of the point.
+            </p>
+
+            <p class="terminal-line">
+                <span class="prompt">mobneutralizer@portfolio:~$</span>
+                ls -la ./projects
+            </p>
+        </section>
+
+        <section class="container gallery-section" id="projects">
+            <div class="section-heading">
+                <div>
+                    <h2><span class="accent">#</span> Project directory</h2>
+                    <p>Everything in one place. More or less organized.</p>
+                </div>
+
+                <div class="terminal-line" id="project-count">
+                    <span class="accent">[</span> loading <span class="accent">]</span>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <div class="search-wrap">
+                    <input
+                        class="search-input"
+                        id="search"
+                        type="search"
+                        placeholder="Search projects..."
+                        aria-label="Search projects"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div
+                    class="filter-list"
+                    id="filters"
+                    aria-label="Filter projects by category"
+                >
+                    <button class="filter-button active" data-category="all" aria-pressed="true">
+                        All
+                    </button>
+                </div>
+            </div>
+
+            <div class="project-grid" id="project-grid" aria-live="polite">
+                <div class="empty-state">
+                    <h3>Loading directory...</h3>
+                    <p>Reading projects.json</p>
+                </div>
+            </div>
+
+            <div class="status-bar">
+                <span>
+                    <span class="status-indicator"></span>
+                    <span id="status-text">Initializing...</span>
+                </span>
+                <span>SYS: MOBNEUTRALIZER // PORTFOLIO</span>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <span>© <span id="year"></span> mobneutralizer. Built by me and my good friend ChatGPT.</span>
+            <span>
+                A subdomain-free part of
+                <a href="https://mobneutralizer.com">mobneutralizer.com</a>
+            </span>
+        </div>
+    </footer>
+
+    <!-- Image/video viewer -->
+    <div
+        class="lightbox"
+        id="lightbox"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Media viewer"
+        aria-hidden="true"
+    >
+        <button class="lightbox-close" id="lightbox-close" aria-label="Close viewer">
+            ×
+        </button>
+
+        <div class="lightbox-content">
+            <div id="lightbox-media-container"></div>
+
+            <div class="lightbox-caption" id="lightbox-caption"></div>
+
+            <div class="lightbox-nav">
+                <button id="lightbox-prev">← Previous</button>
+                <button id="lightbox-next">Next →</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DATA_URL = "./projects.json";
+
+        const grid = document.getElementById("project-grid");
+        const searchInput = document.getElementById("search");
+        const filtersContainer = document.getElementById("filters");
+        const countElement = document.getElementById("project-count");
+        const statusText = document.getElementById("status-text");
+
+        const lightbox = document.getElementById("lightbox");
+        const lightboxMediaContainer = document.getElementById("lightbox-media-container");
+        const lightboxCaption = document.getElementById("lightbox-caption");
+        const lightboxPrev = document.getElementById("lightbox-prev");
+        const lightboxNext = document.getElementById("lightbox-next");
+
+        document.getElementById("year").textContent = new Date().getFullYear();
+
+        let projects = [];
+        let activeCategory = "all";
+        let searchTerm = "";
+        let currentMedia = [];
+        let currentMediaIndex = 0;
+        let lastFocusedElement = null;
+
+        function normalizeMedia(items) {
+            if (!Array.isArray(items)) return [];
+
+            return items
+                .filter(item => typeof item === "string" && item.trim())
+                .map(path => path.trim());
+        }
+
+        function getImages(project) {
+            return normalizeMedia(project.images);
+        }
+
+        function getVideos(project) {
+            return normalizeMedia(project.videos);
+        }
+
+        function getThumbnail(project) {
+            if (typeof project.thumbnail === "string" && project.thumbnail.trim()) {
+                return project.thumbnail.trim();
+            }
+
+            return getImages(project)[0] || "";
+        }
+
+        function getProjectMedia(project) {
+            const images = getImages(project).map(src => ({
+                type: "image",
+                src
+            }));
+
+            const videos = getVideos(project).map(src => ({
+                type: "video",
+                src
+            }));
+
+            return [...images, ...videos];
+        }
+
+        function makeElement(tag, className, text) {
+            const element = document.createElement(tag);
+
+            if (className) element.className = className;
+            if (text !== undefined) element.textContent = text;
+
+            return element;
+        }
+
+        function createFilters() {
+            const categories = [
+                ...new Set(
+                    projects
+                        .map(project => project.category || "Uncategorized")
+                        .filter(Boolean)
+                )
+            ].sort((a, b) => a.localeCompare(b));
+
+            filtersContainer.replaceChildren();
+
+            const allButton = makeElement("button", "filter-button active", "All");
+            allButton.type = "button";
+            allButton.dataset.category = "all";
+            allButton.setAttribute("aria-pressed", "true");
+            filtersContainer.appendChild(allButton);
+
+            categories.forEach(category => {
+                const button = makeElement("button", "filter-button", category);
+                button.type = "button";
+                button.dataset.category = category;
+                button.setAttribute("aria-pressed", "false");
+                filtersContainer.appendChild(button);
+            });
+        }
+
+        function createPreview(project) {
+            const preview = makeElement("button", "project-preview");
+            preview.type = "button";
+
+            const thumbnail = getThumbnail(project);
+            const media = getProjectMedia(project);
+
+            preview.setAttribute(
+                "aria-label",
+                `View media for ${project.title || "Untitled project"}`
+            );
+
+            if (thumbnail) {
+                const image = makeElement("img");
+                image.src = thumbnail;
+                image.alt = project.title || "Project preview";
+                image.loading = "lazy";
+                image.decoding = "async";
+
+                image.addEventListener("error", () => {
+                    const placeholder = makePlaceholder();
+                    preview.replaceChildren(placeholder);
+                }, { once: true });
+
+                preview.appendChild(image);
+            } else {
+                preview.appendChild(makePlaceholder());
+            }
+
+            if (media.length > 0) {
+                const count = makeElement(
+                    "span",
+                    "media-count",
+                    `${media.length} file${media.length === 1 ? "" : "s"}`
+                );
+                preview.appendChild(count);
+            }
+
+            preview.addEventListener("click", () => {
+                if (media.length > 0) {
+                    openLightbox(media, 0, project.title || "Project");
+                } else if (thumbnail) {
+                    openLightbox(
+                        [{ type: "image", src: thumbnail }],
+                        0,
+                        project.title || "Project"
+                    );
+                }
+            });
+
+            return preview;
+        }
+
+        function makePlaceholder() {
+            const placeholder = makeElement("div", "placeholder");
+            placeholder.appendChild(
+                makeElement("span", "placeholder-symbol", "[_]")
+            );
+            placeholder.appendChild(
+                makeElement("span", "", "NO PREVIEW AVAILABLE")
+            );
+            return placeholder;
+        }
+
+        function createProjectCard(project) {
+            const card = makeElement("article", "project-card");
+
+            card.appendChild(createPreview(project));
+
+            const info = makeElement("div", "project-info");
+            const meta = makeElement("div", "project-meta");
+
+            meta.appendChild(
+                makeElement(
+                    "span",
+                    "category-tag",
+                    project.category || "Uncategorized"
+                )
+            );
+
+            if (project.date) {
+                meta.appendChild(makeElement("span", "project-date", project.date));
+            }
+
+            info.appendChild(meta);
+            info.appendChild(
+                makeElement("h3", "project-title", project.title || "Untitled project")
+            );
+
+            if (project.description) {
+                info.appendChild(
+                    makeElement("p", "project-description", project.description)
+                );
+            }
+
+            const actions = makeElement("div", "project-actions");
+            const media = getProjectMedia(project);
+
+            if (media.length > 0) {
+                const viewButton = makeElement("button", "text-action", "View media");
+                viewButton.type = "button";
+                viewButton.addEventListener("click", () => {
+                    openLightbox(media, 0, project.title || "Project");
+                });
+                actions.appendChild(viewButton);
+            }
+
+            if (typeof project.link === "string" && isHttpUrl(project.link)) {
+                const link = makeElement("a", "text-action", "Open project");
+                link.href = project.link;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+                actions.appendChild(link);
+            }
+
+            if (actions.children.length > 0) {
+                info.appendChild(actions);
+            }
+
+            card.appendChild(info);
+            return card;
+        }
+
+        function isHttpUrl(value) {
+            try {
+                const url = new URL(value);
+                return url.protocol === "https:" || url.protocol === "http:";
+            } catch {
+                return false;
+            }
+        }
+
+        function renderProjects() {
+            const filtered = projects.filter(project => {
+                const category = project.category || "Uncategorized";
+
+                const matchesCategory =
+                    activeCategory === "all" || category === activeCategory;
+
+                const searchable = [
+                    project.title,
+                    project.description,
+                    category,
+                    project.date
+                ].filter(Boolean).join(" ").toLowerCase();
+
+                const matchesSearch = searchable.includes(searchTerm);
+
+                return matchesCategory && matchesSearch;
+            });
+
+            grid.replaceChildren();
+
+            if (filtered.length === 0) {
+                const empty = makeElement("div", "empty-state");
+                empty.appendChild(
+                    makeElement("h3", "", projects.length ? "No matching projects." : "Nothing here. Yet.")
+                );
+                empty.appendChild(
+                    makeElement(
+                        "p",
+                        "",
+                        projects.length
+                            ? "Try a different search or category."
+                            : "Add projects to portfolio/projects.json to populate this gallery."
+                    )
+                );
+                grid.appendChild(empty);
+            } else {
+                filtered.forEach(project => {
+                    grid.appendChild(createProjectCard(project));
+                });
+            }
+
+            countElement.replaceChildren();
+            countElement.appendChild(
+                makeElement("span", "accent", "[")
+            );
+            countElement.appendChild(
+                document.createTextNode(` ${filtered.length} project${filtered.length === 1 ? "" : "s"} `)
+            );
+            countElement.appendChild(
+                makeElement("span", "accent", "]")
+            );
+
+            statusText.textContent = "Directory loaded";
+        }
+
+        function openLightbox(media, index, title) {
+            if (!media.length) return;
+
+            currentMedia = media;
+            currentMediaIndex = index;
+            lastFocusedElement = document.activeElement;
+
+            lightbox.classList.add("open");
+            lightbox.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+
+            showLightboxMedia(title);
+            document.getElementById("lightbox-close").focus();
+        }
+
+        function showLightboxMedia(title = "Project") {
+            const item = currentMedia[currentMediaIndex];
+
+            if (!item) return;
+
+            lightboxMediaContainer.replaceChildren();
+
+            let element;
+
+            if (item.type === "video") {
+                element = makeElement("video", "lightbox-media");
+                element.controls = true;
+                element.autoplay = true;
+                element.playsInline = true;
+                element.preload = "metadata";
+            } else {
+                element = makeElement("img", "lightbox-media");
+                element.alt = title;
+            }
+
+            element.src = item.src;
+            lightboxMediaContainer.appendChild(element);
+
+            lightboxCaption.textContent =
+                `${title} — ${currentMediaIndex + 1} of ${currentMedia.length}`;
+
+            lightboxPrev.disabled = currentMediaIndex <= 0;
+            lightboxNext.disabled = currentMediaIndex >= currentMedia.length - 1;
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove("open");
+            lightbox.setAttribute("aria-hidden", "true");
+            lightboxMediaContainer.replaceChildren();
+            document.body.style.overflow = "";
+
+            if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+                lastFocusedElement.focus();
+            }
+        }
+
+        function moveLightbox(direction) {
+            const nextIndex = currentMediaIndex + direction;
+
+            if (nextIndex < 0 || nextIndex >= currentMedia.length) return;
+
+            currentMediaIndex = nextIndex;
+            showLightboxMedia();
+        }
+
+        filtersContainer.addEventListener("click", event => {
+            const button = event.target.closest("[data-category]");
+            if (!button) return;
+
+            activeCategory = button.dataset.category;
+
+            filtersContainer.querySelectorAll(".filter-button").forEach(item => {
+                const active = item === button;
+                item.classList.toggle("active", active);
+                item.setAttribute("aria-pressed", String(active));
+            });
+
+            renderProjects();
+        });
+
+        searchInput.addEventListener("input", event => {
+            searchTerm = event.target.value.trim().toLowerCase();
+            renderProjects();
+        });
+
+        document.getElementById("lightbox-close").addEventListener("click", closeLightbox);
+        lightboxPrev.addEventListener("click", () => moveLightbox(-1));
+        lightboxNext.addEventListener("click", () => moveLightbox(1));
+
+        lightbox.addEventListener("click", event => {
+            if (event.target === lightbox) closeLightbox();
+        });
+
+        document.addEventListener("keydown", event => {
+            if (!lightbox.classList.contains("open")) return;
+
+            if (event.key === "Escape") closeLightbox();
+            if (event.key === "ArrowLeft") moveLightbox(-1);
+            if (event.key === "ArrowRight") moveLightbox(1);
+        });
+
+        async function loadProjects() {
+            try {
+                const response = await fetch(DATA_URL, { cache: "no-cache" });
+
+                if (!response.ok) {
+                    throw new Error(`Could not load projects.json (HTTP ${response.status})`);
+                }
+
+                const data = await response.json();
+
+                if (!data || !Array.isArray(data.projects)) {
+                    throw new Error('projects.json must contain a "projects" array.');
+                }
+
+                projects = data.projects.filter(
+                    project => project && typeof project === "object"
+                );
+
+                createFilters();
+                renderProjects();
+            } catch (error) {
+                console.error("Portfolio loading error:", error);
+
+                countElement.textContent = "[ error ]";
+                statusText.textContent = "Directory unavailable";
+
+                grid.replaceChildren();
+
+                const empty = makeElement("div", "empty-state");
+                empty.appendChild(makeElement("h3", "", "Unable to load projects."));
+                empty.appendChild(
+                    makeElement(
+                        "p",
+                        "",
+                        "Check that portfolio/projects.json exists and contains valid JSON. If you opened this file directly on your computer, run it through a local web server instead."
+                    )
+                );
+
+                grid.appendChild(empty);
+            }
+        }
+
+        loadProjects();
+    </script>
+</body>
+</html>

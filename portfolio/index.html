@@ -1,394 +1,221 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#080b08">
-    <title>Portfolio | mobneutralizer</title>
-    <link rel="icon" href="/favicon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080b08">
+<title>Portfolio | mobneutralizer</title>
+<link rel="icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
-            --green: #13fe03;
-            --bg: #080b08;
-            --panel: #101410;
-            --border: #253325;
-            --muted: #8a9988;
-            --text: #e0e9df;
-            --red: #ff5d5d;
-        }
+<style>
+:root {
+    --green: #13fe03;
+    --bg: #080b08;
+    --panel: #101410;
+    --border: #253325;
+    --muted: #8a9988;
+    --text: #e0e9df;
+    --red: #ff6565;
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Fira Code", monospace;
+    line-height: 1.6;
+}
+a { color: var(--green); }
+.container { width: min(1100px, calc(100% - 36px)); margin: auto; }
+header { border-bottom: 1px solid var(--border); background: #090d09; }
+.topbar {
+    min-height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+.brand {
+    color: var(--green);
+    text-decoration: none;
+    font: bold 1.3rem "Share Tech Mono", monospace;
+}
+.brand span { color: var(--text); }
+nav a { text-decoration: none; padding: 8px 12px; border: 1px solid var(--border); }
+nav a:hover { border-color: var(--green); }
+main { padding: 52px 0 70px; }
+.eyebrow { color: var(--green); font-size: .85rem; }
+h1, h2 { font-family: "Share Tech Mono", monospace; line-height: 1.2; }
+h1 { color: var(--green); font-size: clamp(2.2rem, 6vw, 4rem); margin: 8px 0 12px; }
+.intro { max-width: 720px; color: var(--muted); margin-bottom: 32px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0; }
+input, select, button { font: inherit; }
+input, select {
+    min-width: 0;
+    padding: 11px 13px;
+    color: var(--text);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 0;
+}
+input { flex: 1 1 260px; }
+select { flex: 0 1 190px; }
+input:focus, select:focus { outline: 1px solid var(--green); }
+.status { color: var(--muted); font-size: .85rem; margin-bottom: 16px; }
+.status.error { color: var(--red); }
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 20px;
+}
+.project {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border: 1px solid var(--border);
+    background: var(--panel);
+}
+.project:hover { border-color: var(--green); }
+.preview {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    border-bottom: 1px solid var(--border);
+    background: #050705;
+    color: var(--green);
+    cursor: pointer;
+}
+.preview img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.preview-placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-content: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px;
+    color: var(--muted);
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+.preview-placeholder strong { color: var(--green); }
+.play-indicator {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    padding: 5px 9px;
+    border: 1px solid var(--green);
+    background: #080b08e8;
+    color: var(--green);
+    font-size: .8rem;
+}
+.project-body { display: flex; flex: 1; flex-direction: column; gap: 10px; padding: 17px; }
+.project h2 { color: var(--green); font-size: 1.35rem; margin: 0; overflow-wrap: anywhere; }
+.project p { color: var(--muted); font-size: .9rem; margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.project-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 12px;
+    color: var(--muted);
+    font-size: .78rem;
+}
+.tag { color: var(--green); border: 1px solid var(--border); padding: 2px 7px; }
+.empty { border: 1px dashed var(--border); padding: 35px 20px; color: var(--muted); text-align: center; }
+footer { padding: 24px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: .8rem; }
 
-        * { box-sizing: border-box; }
+.modal {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: #000e;
+}
+.modal.open { display: flex; }
+.modal-panel {
+    width: min(1000px, 100%);
+    max-height: 95vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    border: 1px solid var(--green);
+}
+.modal-head, .modal-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+}
+.modal-title { margin: 0; color: var(--green); font-size: 1.1rem; overflow-wrap: anywhere; }
+.modal-controls { display: flex; gap: 8px; flex-shrink: 0; }
+.modal button {
+    padding: 7px 11px;
+    color: var(--green);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    cursor: pointer;
+}
+.modal button:disabled { opacity: .35; cursor: default; }
+.modal-content {
+    min-height: 180px;
+    overflow: auto;
+    display: grid;
+    place-items: center;
+    padding: 14px;
+}
+.modal-content img, .modal-content video {
+    display: block;
+    max-width: 100%;
+    max-height: 68vh;
+    object-fit: contain;
+}
+.modal-message { max-width: 700px; padding: 22px; color: var(--muted); text-align: center; overflow-wrap: anywhere; }
+.modal-message strong { display: block; color: var(--red); margin-bottom: 8px; }
+.modal-message code { color: var(--green); }
+.modal-foot { border-top: 1px solid var(--border); border-bottom: 0; color: var(--muted); font-size: .8rem; }
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: var(--bg);
-            color: var(--text);
-            font-family: "Fira Code", monospace;
-            line-height: 1.6;
-        }
-
-        a { color: var(--green); }
-
-        .container {
-            width: min(1100px, calc(100% - 36px));
-            margin: 0 auto;
-        }
-
-        header {
-            border-bottom: 1px solid var(--border);
-            background: #090d09;
-        }
-
-        .topbar {
-            min-height: 68px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .brand {
-            text-decoration: none;
-            font-family: "Share Tech Mono", monospace;
-            font-size: 1.3rem;
-            font-weight: bold;
-        }
-
-        .brand span { color: var(--text); }
-
-        nav a {
-            text-decoration: none;
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-        }
-
-        nav a:hover {
-            border-color: var(--green);
-            background: #102010;
-        }
-
-        main { padding: 52px 0 70px; }
-
-        .eyebrow {
-            color: var(--green);
-            font-size: 0.85rem;
-            margin-bottom: 8px;
-        }
-
-        h1, h2, h3 {
-            font-family: "Share Tech Mono", monospace;
-            line-height: 1.2;
-        }
-
-        h1 {
-            color: var(--green);
-            font-size: clamp(2.2rem, 6vw, 4rem);
-            margin: 0 0 12px;
-        }
-
-        .intro {
-            max-width: 720px;
-            color: var(--muted);
-            margin: 0 0 32px;
-        }
-
-        .toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin: 26px 0;
-        }
-
-        input, select, button {
-            font: inherit;
-        }
-
-        input, select {
-            min-width: 0;
-            padding: 11px 13px;
-            color: var(--text);
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 0;
-        }
-
-        input {
-            flex: 1 1 260px;
-        }
-
-        select { flex: 0 1 190px; }
-
-        input:focus, select:focus {
-            outline: 1px solid var(--green);
-            border-color: var(--green);
-        }
-
-        .status {
-            color: var(--muted);
-            font-size: 0.85rem;
-            margin: 0 0 16px;
-        }
-
-        .status.error { color: var(--red); }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-            gap: 20px;
-        }
-
-        .project {
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-            border: 1px solid var(--border);
-            background: var(--panel);
-            transition: border-color 0.15s, transform 0.15s;
-        }
-
-        .project:hover {
-            border-color: var(--green);
-            transform: translateY(-2px);
-        }
-
-        .preview {
-            position: relative;
-            display: block;
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            padding: 0;
-            overflow: hidden;
-            border: 0;
-            border-bottom: 1px solid var(--border);
-            background: #050705;
-            color: var(--green);
-            cursor: pointer;
-        }
-
-        .preview img, .preview video {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .preview img { position: absolute; inset: 0; }
-
-        .preview-placeholder {
-            position: absolute;
-            inset: 0;
-            display: grid;
-            place-content: center;
-            gap: 8px;
-            padding: 20px;
-            color: var(--muted);
-            text-align: center;
-            overflow-wrap: anywhere;
-        }
-
-        .preview-placeholder strong {
-            color: var(--green);
-            font-size: 1.1rem;
-        }
-
-        .play-indicator {
-            position: absolute;
-            right: 12px;
-            bottom: 12px;
-            padding: 5px 9px;
-            border: 1px solid var(--green);
-            background: #080b08e8;
-            color: var(--green);
-            font-size: 0.8rem;
-        }
-
-        .project-body {
-            display: flex;
-            flex: 1;
-            flex-direction: column;
-            padding: 17px;
-            gap: 10px;
-        }
-
-        .project h2 {
-            margin: 0;
-            font-size: 1.35rem;
-            color: var(--green);
-            overflow-wrap: anywhere;
-        }
-
-        .project p {
-            margin: 0;
-            color: var(--muted);
-            font-size: 0.9rem;
-            white-space: pre-wrap;
-            overflow-wrap: anywhere;
-        }
-
-        .project-meta {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-top: auto;
-            padding-top: 12px;
-            font-size: 0.78rem;
-            color: var(--muted);
-        }
-
-        .tag {
-            color: var(--green);
-            border: 1px solid var(--border);
-            padding: 2px 7px;
-        }
-
-        .empty {
-            border: 1px dashed var(--border);
-            padding: 35px 20px;
-            color: var(--muted);
-            text-align: center;
-        }
-
-        footer {
-            padding: 24px 0;
-            border-top: 1px solid var(--border);
-            color: var(--muted);
-            font-size: 0.8rem;
-        }
-
-        /* Media viewer */
-        .modal {
-            position: fixed;
-            z-index: 1000;
-            inset: 0;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 18px;
-            background: #000e;
-        }
-
-        .modal.open { display: flex; }
-
-        .modal-panel {
-            width: min(1000px, 100%);
-            max-height: 95vh;
-            display: flex;
-            flex-direction: column;
-            background: var(--bg);
-            border: 1px solid var(--green);
-        }
-
-        .modal-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .modal-title {
-            margin: 0;
-            color: var(--green);
-            font-size: 1.1rem;
-            overflow-wrap: anywhere;
-        }
-
-        .modal-controls {
-            display: flex;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-
-        .modal button {
-            padding: 7px 11px;
-            color: var(--green);
-            background: var(--panel);
-            border: 1px solid var(--border);
-            cursor: pointer;
-        }
-
-        .modal button:hover { border-color: var(--green); }
-
-        .modal-content {
-            min-height: 180px;
-            overflow: auto;
-            display: grid;
-            place-items: center;
-            padding: 14px;
-        }
-
-        .modal-content img,
-        .modal-content video {
-            display: block;
-            max-width: 100%;
-            max-height: 68vh;
-            object-fit: contain;
-        }
-
-        .modal-message {
-            max-width: 700px;
-            color: var(--muted);
-            padding: 22px;
-            text-align: center;
-            overflow-wrap: anywhere;
-        }
-
-        .modal-message strong {
-            display: block;
-            color: var(--red);
-            margin-bottom: 8px;
-        }
-
-        .modal-message code {
-            color: var(--green);
-            overflow-wrap: anywhere;
-        }
-
-        .modal-foot {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 10px 16px;
-            border-top: 1px solid var(--border);
-            color: var(--muted);
-            font-size: 0.8rem;
-        }
-
-        @media (max-width: 520px) {
-            main { padding-top: 35px; }
-            .topbar { min-height: 60px; }
-            .modal { padding: 8px; }
-            .modal-head { align-items: flex-start; }
-            .modal-controls { gap: 4px; }
-            .modal button { padding: 6px 8px; }
-        }
-    </style>
+@media (max-width: 520px) {
+    main { padding-top: 35px; }
+    .modal { padding: 8px; }
+    .modal-head { align-items: flex-start; }
+    .modal-controls { gap: 4px; }
+    .modal button { padding: 6px 8px; }
+}
+</style>
 </head>
 
 <body>
 <header>
     <div class="container topbar">
         <a class="brand" href="/">mobneutralizer<span>.com</span></a>
-        <nav aria-label="Main navigation">
-            <a href="/">./home</a>
-        </nav>
+        <nav><a href="/">./home</a></nav>
     </div>
 </header>
 
 <main class="container">
     <div class="eyebrow">root@mobneutralizer:~/portfolio$</div>
     <h1>Portfolio</h1>
-    <p class="intro">
-        Projects, experiments, and things I've made. Select a project to view its media.
-    </p>
+    <p class="intro">Projects, experiments, and things I've made. Select a project to view its media.</p>
 
     <div class="toolbar">
         <input id="search" type="search" placeholder="Search projects..." aria-label="Search projects">
@@ -430,90 +257,126 @@
 (() => {
     "use strict";
 
-    const projectsElement = document.getElementById("projects");
-    const searchElement = document.getElementById("search");
-    const categoryElement = document.getElementById("category");
-    const statusElement = document.getElementById("status");
-    const modal = document.getElementById("modal");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalContent = document.getElementById("modalContent");
-    const mediaCounter = document.getElementById("mediaCounter");
-    const previousButton = document.getElementById("previous");
-    const nextButton = document.getElementById("next");
-    const closeButton = document.getElementById("close");
+    const $ = id => document.getElementById(id);
+    const projectsEl = $("projects");
+    const searchEl = $("search");
+    const categoryEl = $("category");
+    const statusEl = $("status");
+    const modal = $("modal");
+    const modalTitle = $("modalTitle");
+    const modalContent = $("modalContent");
+    const mediaCounter = $("mediaCounter");
+    const previousBtn = $("previous");
+    const nextBtn = $("next");
+    const closeBtn = $("close");
 
     let projects = [];
     let activeProject = null;
-    let activeMediaIndex = 0;
-    let lastFocusedElement = null;
+    let activeIndex = 0;
+    let lastFocus = null;
+    let previewJobs = [];
 
-    // Keep project media paths relative to portfolio/index.html.
-    // Example: "media/the-woods.mp4"
-    function mediaUrl(path) {
+    /*
+      VIDEO PATHS:
+      Large videos live in R2, served through a Worker at:
+      https://mobneutralizer.com/media/filename.mp4
+
+      Use "/media/filename.mp4" in projects.json.
+      Small images can remain in portfolio/media/.
+    */
+
+    function resolvePath(path) {
         if (typeof path !== "string" || !path.trim()) return "";
-        return path.trim();
+        const value = path.trim();
+
+        // Absolute paths such as /media/video.mp4
+        if (value.startsWith("/")) return value;
+
+        // Full URLs are allowed too.
+        if (/^https?:\/\//i.test(value)) return value;
+
+        // Relative paths resolve from /portfolio/.
+        return new URL(value, location.href).href;
     }
 
-    function listOf(value) {
+    function list(value) {
         if (Array.isArray(value)) {
-            return value.filter(item => typeof item === "string" && item.trim());
+            return value.filter(v => typeof v === "string" && v.trim());
         }
-        if (typeof value === "string" && value.trim()) return [value.trim()];
-        return [];
+        return typeof value === "string" && value.trim() ? [value.trim()] : [];
     }
 
-    function getImages(project) {
-        return listOf(project.images);
-    }
+    function imagesOf(p) { return list(p.images); }
+    function videosOf(p) { return list(p.videos); }
 
-    function getVideos(project) {
-        return listOf(project.videos);
-    }
-
-    function getMedia(project) {
+    function mediaOf(p) {
         return [
-            ...getImages(project).map(src => ({ type: "image", src })),
-            ...getVideos(project).map(src => ({ type: "video", src }))
+            ...imagesOf(p).map(src => ({ type: "image", src })),
+            ...videosOf(p).map(src => ({ type: "video", src }))
         ];
     }
 
-    function setStatus(message, isError = false) {
-        statusElement.textContent = message;
-        statusElement.classList.toggle("error", isError);
+    function setStatus(message, error = false) {
+        statusEl.textContent = message;
+        statusEl.classList.toggle("error", error);
     }
 
-    function makePlaceholder(title, message = "No preview available") {
-        const placeholder = document.createElement("div");
-        placeholder.className = "preview-placeholder";
-
+    function placeholder(title, message) {
+        const div = document.createElement("div");
+        div.className = "preview-placeholder";
         const heading = document.createElement("strong");
         heading.textContent = title || "Untitled project";
-
         const detail = document.createElement("span");
-        detail.textContent = message;
-
-        placeholder.append(heading, detail);
-        return placeholder;
+        detail.textContent = message || "No preview available";
+        div.append(heading, detail);
+        return div;
     }
 
-    /*
-     * Preview priority:
-     * 1. project.preview, if explicitly supplied
-     * 2. The first project image
-     * 3. A captured frame from the first video
-     * 4. A text placeholder
-     */
+    function makePreviewImage(src, title, onFailure) {
+        const img = document.createElement("img");
+        img.alt = title ? title + " preview" : "Project preview";
+        img.loading = "lazy";
+        img.decoding = "async";
+
+        img.addEventListener("error", () => {
+            img.remove();
+            onFailure();
+        }, { once: true });
+
+        img.src = resolvePath(src);
+        return img;
+    }
+
     function buildPreview(project, container) {
         container.replaceChildren();
 
-        const videos = getVideos(project);
-        const images = getImages(project);
-        const explicitPreview = mediaUrl(project.preview);
-        const imageFallback = images.length ? mediaUrl(images[0]) : "";
+        const customPreview = typeof project.preview === "string" ? project.preview : "";
+        const images = imagesOf(project);
+        const videos = videosOf(project);
+
+        // Try an explicitly provided preview first, then the first image.
+        const imageCandidates = [
+            customPreview,
+            ...images
+        ].filter(Boolean);
+
+        function tryImageAt(index) {
+            if (index >= imageCandidates.length) {
+                tryVideoFrame();
+                return;
+            }
+
+            const img = makePreviewImage(
+                imageCandidates[index],
+                project.title,
+                () => tryImageAt(index + 1)
+            );
+            container.replaceChildren(img);
+        }
 
         function tryVideoFrame() {
             if (!videos.length) {
-                container.replaceChildren(makePlaceholder(project.title));
+                container.replaceChildren(placeholder(project.title, "No preview available"));
                 return;
             }
 
@@ -521,136 +384,98 @@
             video.muted = true;
             video.playsInline = true;
             video.preload = "metadata";
+            video.crossOrigin = "anonymous";
             video.setAttribute("aria-hidden", "true");
-            video.style.position = "absolute";
-            video.style.width = "1px";
-            video.style.height = "1px";
-            video.style.opacity = "0";
-            video.style.pointerEvents = "none";
+
+            // Keep the thumbnail-generation video out of the visible layout.
+            video.style.cssText =
+                "position:absolute;width:1px;height:1px;opacity:0;pointer-events:none";
 
             let finished = false;
+            let timeoutId;
 
-            function failPreview() {
+            function cleanup() {
+                clearTimeout(timeoutId);
+                video.removeAttribute("src");
+                video.load();
+                video.remove();
+            }
+
+            function fail() {
                 if (finished) return;
                 finished = true;
-                video.remove();
-
+                cleanup();
                 container.replaceChildren(
-                    makePlaceholder(
-                        project.title,
-                        "No thumbnail — open project to check its media"
-                    )
+                    placeholder(project.title, "Preview unavailable — open project to check media")
                 );
             }
 
-            function captureFrame() {
+            function capture() {
                 if (finished) return;
 
                 try {
-                    const width = video.videoWidth;
-                    const height = video.videoHeight;
-
-                    if (!width || !height) {
-                        failPreview();
+                    if (!video.videoWidth || !video.videoHeight) {
+                        fail();
                         return;
                     }
 
                     const canvas = document.createElement("canvas");
-                    canvas.width = width;
-                    canvas.height = height;
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
 
-                    const context = canvas.getContext("2d");
-                    context.drawImage(video, 0, 0, width, height);
+                    const ctx = canvas.getContext("2d");
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-                    const image = document.createElement("img");
-                    image.alt = project.title + " preview";
-                    image.loading = "lazy";
-                    image.src = canvas.toDataURL("image/jpeg", 0.82);
+                    const img = document.createElement("img");
+                    img.alt = (project.title || "Project") + " video preview";
+                    img.loading = "lazy";
+                    img.src = canvas.toDataURL("image/jpeg", 0.85);
 
                     finished = true;
-                    video.remove();
-                    container.replaceChildren(image);
-                } catch {
-                    failPreview();
+                    cleanup();
+                    container.replaceChildren(img);
+                } catch (error) {
+                    console.warn("Could not extract video thumbnail:", videos[0], error);
+                    fail();
                 }
             }
 
             video.addEventListener("loadedmetadata", () => {
-                // Seek slightly into the video to avoid a blank first frame.
-                if (video.duration > 0.15) {
-                    video.currentTime = 0.1;
+                if (video.duration > 0.2) {
+                    video.currentTime = Math.min(0.5, video.duration / 2);
                 } else {
-                    captureFrame();
+                    capture();
                 }
             }, { once: true });
 
-            video.addEventListener("seeked", captureFrame, { once: true });
-            video.addEventListener("error", failPreview, { once: true });
+            video.addEventListener("seeked", capture, { once: true });
+            video.addEventListener("error", fail, { once: true });
 
-            // Avoid waiting forever if the video cannot be decoded.
-            window.setTimeout(() => {
-                if (!finished) failPreview();
-            }, 10000);
-
-            video.src = mediaUrl(videos[0]);
-            container.appendChild(video);
+            timeoutId = setTimeout(fail, 15000);
+            video.src = resolvePath(videos[0]);
+            video.load();
         }
 
-        function tryImage(path, onFailure) {
-            const image = document.createElement("img");
-            image.alt = project.title + " preview";
-            image.loading = "lazy";
-
-            image.addEventListener("error", () => {
-                image.remove();
-                onFailure();
-            }, { once: true });
-
-            image.addEventListener("load", () => {
-                // Only attach a valid image to the card.
-                if (!container.contains(image)) {
-                    container.replaceChildren(image);
-                }
-            }, { once: true });
-
-            image.src = path;
-            container.replaceChildren(image);
-        }
-
-        if (explicitPreview) {
-            tryImage(explicitPreview, () => {
-                if (imageFallback && imageFallback !== explicitPreview) {
-                    tryImage(imageFallback, tryVideoFrame);
-                } else {
-                    tryVideoFrame();
-                }
-            });
-        } else if (imageFallback) {
-            tryImage(imageFallback, tryVideoFrame);
-        } else {
-            tryVideoFrame();
-        }
+        tryImageAt(0);
     }
 
-    function createProjectCard(project) {
+    function createCard(project) {
         const card = document.createElement("article");
         card.className = "project";
 
-        const previewButton = document.createElement("button");
-        previewButton.type = "button";
-        previewButton.className = "preview";
-        previewButton.setAttribute("aria-label", "Open " + (project.title || "project"));
+        const preview = document.createElement("button");
+        preview.type = "button";
+        preview.className = "preview";
+        preview.setAttribute("aria-label", "Open " + (project.title || "project"));
+        buildPreview(project, preview);
+        preview.addEventListener("click", () => openProject(project));
 
-        buildPreview(project, previewButton);
-
-        if (getMedia(project).length) {
-            const play = document.createElement("span");
-            play.className = "play-indicator";
-            play.textContent = "VIEW ↗";
-            previewButton.appendChild(play);
+        if (mediaOf(project).length) {
+            const badge = document.createElement("span");
+            badge.className = "play-indicator";
+            badge.textContent = "VIEW ↗";
+            preview.appendChild(badge);
         }
-
-        previewButton.addEventListener("click", () => openProject(project));
 
         const body = document.createElement("div");
         body.className = "project-body";
@@ -673,28 +498,24 @@
 
         meta.append(tag, date);
         body.append(title, description, meta);
-        card.append(previewButton, body);
-
+        card.append(preview, body);
         return card;
     }
 
-    function renderProjects() {
-        const query = searchElement.value.trim().toLowerCase();
-        const category = categoryElement.value;
+    function render() {
+        const query = searchEl.value.trim().toLowerCase();
+        const category = categoryEl.value;
 
-        const filtered = projects.filter(project => {
+        const filtered = projects.filter(p => {
             const searchable = [
-                project.title,
-                project.description,
-                project.category,
-                project.date
+                p.title, p.description, p.category, p.date
             ].join(" ").toLowerCase();
 
             return searchable.includes(query) &&
-                (!category || (project.category || "Other") === category);
+                (!category || (p.category || "Other") === category);
         });
 
-        projectsElement.replaceChildren();
+        projectsEl.replaceChildren();
 
         if (!filtered.length) {
             const empty = document.createElement("div");
@@ -703,11 +524,9 @@
             empty.textContent = projects.length
                 ? "No projects match your search."
                 : "No projects have been added yet.";
-            projectsElement.appendChild(empty);
+            projectsEl.appendChild(empty);
         } else {
-            filtered.forEach(project => {
-                projectsElement.appendChild(createProjectCard(project));
-            });
+            filtered.forEach(p => projectsEl.appendChild(createCard(p)));
         }
 
         setStatus(`${filtered.length} project${filtered.length === 1 ? "" : "s"} found.`);
@@ -715,113 +534,116 @@
 
     function populateCategories() {
         const categories = [...new Set(
-            projects.map(project => project.category || "Other")
-        )].sort((a, b) => a.localeCompare(b));
+            projects.map(p => p.category || "Other")
+        )].sort();
 
-        categoryElement.replaceChildren();
+        categoryEl.replaceChildren();
 
-        const allOption = document.createElement("option");
-        allOption.value = "";
-        allOption.textContent = "All categories";
-        categoryElement.appendChild(allOption);
+        const all = document.createElement("option");
+        all.value = "";
+        all.textContent = "All categories";
+        categoryEl.appendChild(all);
 
-        categories.forEach(category => {
+        categories.forEach(name => {
             const option = document.createElement("option");
-            option.value = category;
-            option.textContent = category;
-            categoryElement.appendChild(option);
+            option.value = name;
+            option.textContent = name;
+            categoryEl.appendChild(option);
         });
     }
 
-    function showMediaError(src, video) {
+    function showError(src, isVideo, detail = "") {
         modalContent.replaceChildren();
 
-        const message = document.createElement("div");
-        message.className = "modal-message";
+        const box = document.createElement("div");
+        box.className = "modal-message";
 
         const heading = document.createElement("strong");
-        heading.textContent = video
+        heading.textContent = isVideo
             ? "The browser could not play this video."
-            : "The image could not be loaded.";
+            : "This image could not be loaded.";
 
-        const explanation = document.createElement("p");
-        explanation.textContent = video
-            ? "Check that the file exists and uses a browser-compatible codec. MP4 files encoded with H.264 video and AAC audio are a good choice."
+        const text = document.createElement("p");
+        text.textContent = isVideo
+            ? "Check that the media URL exists, that the R2 Worker is serving the file, and that the response supports video playback and byte-range requests."
             : "Check that the image path is correct and the file has been uploaded.";
 
         const path = document.createElement("code");
         path.textContent = src;
 
-        message.append(heading, explanation, path);
+        box.append(heading, text, path);
 
-        if (video) {
-            const tip = document.createElement("p");
-            tip.textContent = "If the path looks correct, try re-encoding the video as H.264/AAC MP4.";
-            message.appendChild(tip);
+        if (detail) {
+            const extra = document.createElement("p");
+            extra.textContent = detail;
+            box.appendChild(extra);
         }
 
-        modalContent.appendChild(message);
+        modalContent.appendChild(box);
     }
 
     function showMedia(index) {
         if (!activeProject) return;
 
-        const media = getMedia(activeProject);
+        const media = mediaOf(activeProject);
 
         if (!media.length) {
             modalContent.replaceChildren(
-                makePlaceholder(activeProject.title, "This project has no images or videos yet.")
+                placeholder(activeProject.title, "This project has no images or videos yet.")
             );
             mediaCounter.textContent = "No media";
-            previousButton.disabled = true;
-            nextButton.disabled = true;
+            previousBtn.disabled = true;
+            nextBtn.disabled = true;
             return;
         }
 
-        activeMediaIndex = (index + media.length) % media.length;
-        const item = media[activeMediaIndex];
+        activeIndex = (index + media.length) % media.length;
+        const item = media[activeIndex];
 
         modalTitle.textContent = activeProject.title || "Project";
         modalContent.replaceChildren();
-
-        previousButton.disabled = media.length < 2;
-        nextButton.disabled = media.length < 2;
-        mediaCounter.textContent = `${activeMediaIndex + 1} / ${media.length}`;
+        mediaCounter.textContent = `${activeIndex + 1} / ${media.length}`;
+        previousBtn.disabled = media.length < 2;
+        nextBtn.disabled = media.length < 2;
 
         if (item.type === "image") {
-            const image = document.createElement("img");
-            image.alt = activeProject.title || "Project image";
-            image.src = mediaUrl(item.src);
-            image.addEventListener("error", () => showMediaError(item.src, false), { once: true });
-            modalContent.appendChild(image);
-        } else {
-            const video = document.createElement("video");
-            video.controls = true;
-            video.autoplay = true;
-            video.playsInline = true;
-            video.preload = "metadata";
-            video.src = mediaUrl(item.src);
-
-            video.addEventListener("error", () => {
-                showMediaError(item.src, true);
-            }, { once: true });
-
-            modalContent.appendChild(video);
-
-            // If autoplay is blocked, the controls still let the visitor play it.
-            video.play().catch(() => {});
+            const img = document.createElement("img");
+            img.alt = activeProject.title || "Project image";
+            img.src = resolvePath(item.src);
+            img.addEventListener("error", () => showError(item.src, false), { once: true });
+            modalContent.appendChild(img);
+            return;
         }
+
+        const video = document.createElement("video");
+        video.controls = true;
+        video.autoplay = true;
+        video.playsInline = true;
+        video.preload = "metadata";
+        video.src = resolvePath(item.src);
+
+        video.addEventListener("error", () => {
+            const code = video.error ? video.error.code : 0;
+            const details = code === 4
+                ? "The browser reports that the source or format is unsupported. Check the URL and codec."
+                : code === 2
+                    ? "The browser reports a network error. Check the file URL and server response."
+                    : "";
+            showError(item.src, true, details);
+        }, { once: true });
+
+        modalContent.appendChild(video);
+        video.play().catch(() => {});
     }
 
     function openProject(project) {
         activeProject = project;
-        activeMediaIndex = 0;
-        lastFocusedElement = document.activeElement;
-
+        activeIndex = 0;
+        lastFocus = document.activeElement;
         modal.classList.add("open");
         document.body.style.overflow = "hidden";
         showMedia(0);
-        closeButton.focus();
+        closeBtn.focus();
     }
 
     function closeModal() {
@@ -838,23 +660,18 @@
         modalContent.replaceChildren();
         activeProject = null;
 
-        if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
-            lastFocusedElement.focus();
-        }
+        if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
     }
 
-    searchElement.addEventListener("input", renderProjects);
-    categoryElement.addEventListener("change", renderProjects);
-
-    previousButton.addEventListener("click", () => {
-        if (activeProject) showMedia(activeMediaIndex - 1);
+    searchEl.addEventListener("input", render);
+    categoryEl.addEventListener("change", render);
+    previousBtn.addEventListener("click", () => {
+        if (activeProject) showMedia(activeIndex - 1);
     });
-
-    nextButton.addEventListener("click", () => {
-        if (activeProject) showMedia(activeMediaIndex + 1);
+    nextBtn.addEventListener("click", () => {
+        if (activeProject) showMedia(activeIndex + 1);
     });
-
-    closeButton.addEventListener("click", closeModal);
+    closeBtn.addEventListener("click", closeModal);
 
     modal.addEventListener("click", event => {
         if (event.target === modal) closeModal();
@@ -862,38 +679,33 @@
 
     document.addEventListener("keydown", event => {
         if (!modal.classList.contains("open")) return;
-
         if (event.key === "Escape") closeModal();
-        if (event.key === "ArrowLeft" && activeProject) showMedia(activeMediaIndex - 1);
-        if (event.key === "ArrowRight" && activeProject) showMedia(activeMediaIndex + 1);
+        if (event.key === "ArrowLeft" && activeProject) showMedia(activeIndex - 1);
+        if (event.key === "ArrowRight" && activeProject) showMedia(activeIndex + 1);
     });
 
     async function init() {
         try {
             const response = await fetch("./projects.json", { cache: "no-store" });
-
-            if (!response.ok) {
-                throw new Error(`projects.json returned HTTP ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`projects.json returned HTTP ${response.status}`);
 
             const data = await response.json();
-
             if (!data || !Array.isArray(data.projects)) {
                 throw new Error('projects.json must contain a "projects" array.');
             }
 
             projects = data.projects;
             populateCategories();
-            renderProjects();
+            render();
         } catch (error) {
             console.error("Portfolio loading error:", error);
-            projectsElement.replaceChildren();
+            projectsEl.replaceChildren();
 
             const empty = document.createElement("div");
             empty.className = "empty";
             empty.style.gridColumn = "1 / -1";
-            empty.textContent = "Could not load projects. Check portfolio/projects.json and the browser console.";
-            projectsElement.appendChild(empty);
+            empty.textContent = "Could not load projects.json. Check the file and browser console.";
+            projectsEl.appendChild(empty);
 
             setStatus("Portfolio failed to load: " + error.message, true);
         }

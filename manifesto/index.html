@@ -1,261 +1,402 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#070907">
-  <meta name="description" content="A private, local-first writing space for drafting a manifesto.">
-  <title>Manifesto // Draft Space</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050805">
+  <meta name="description" content="Thoughts, opinions, principles, and other things MobNeutralizer felt like writing down.">
+  <title>Manifesto // mobneutralizer</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
     :root {
       color-scheme: dark;
-      --bg: #070907;
-      --panel: #0c100c;
-      --panel-2: #101610;
-      --green: #13fe03;
-      --green-soft: #a1ff9a;
-      --text: #e4eee2;
-      --muted: #839082;
-      --line: #244022;
-      --warning: #d4ed87;
-      --radius: 10px;
+      --background: #050805;
+      --surface: #090e09;
+      --surface-hover: #0d160d;
+      --border: #183318;
+      --text: #d8e8d5;
+      --muted: #82917e;
+      --accent: #13fe03;
+      --accent-soft: rgba(19, 254, 3, .09);
+      --accent-glow: rgba(19, 254, 3, .22);
+      --font-main: "Fira Code", "Courier New", monospace;
+      --font-display: "Share Tech Mono", "Courier New", monospace;
     }
-    * { box-sizing: border-box; }
-    html { min-height: 100%; background: var(--bg); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 100px; }
     body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--text);
-      background:
-        radial-gradient(ellipse at 50% -10%, rgba(19,254,3,.09), transparent 44%),
-        var(--bg);
-      font-family: "Fira Code", "Cascadia Code", Consolas, "Courier New", monospace;
-      line-height: 1.6;
+      min-height: 100vh; display: flex; flex-direction: column;
+      background-color: var(--background);
+      background-image: linear-gradient(rgba(19,254,3,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(19,254,3,.025) 1px, transparent 1px);
+      background-size: 36px 36px; color: var(--text); font: 13px/1.8 var(--font-main);
     }
-    a { color: var(--green); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    button, textarea { font: inherit; }
-    .wrap { width: min(1100px, calc(100% - 32px)); margin: 0 auto; }
-    header {
-      border-bottom: 1px solid var(--line);
-      background: rgba(7,9,7,.88);
-    }
-    .topbar {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 20px; min-height: 66px; flex-wrap: wrap; padding: 10px 0;
-    }
-    .brand { font-weight: 800; letter-spacing: .06em; color: var(--green); }
-    .brand span { color: var(--muted); font-weight: 400; }
-    nav { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; font-size: .9rem; }
-    main { padding: 38px 0 56px; }
-    .eyebrow { color: var(--green); font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; }
-    h1 { margin: 8px 0 4px; font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.1; letter-spacing: -.055em; }
-    .lede { margin: 12px 0 28px; color: var(--muted); max-width: 740px; }
-    .editor-shell { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--panel); box-shadow: 0 18px 70px rgba(0,0,0,.28); }
-    .editor-head {
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--panel-2); flex-wrap: wrap;
-    }
-    .file-label { display: flex; align-items: center; gap: 10px; font-size: .9rem; }
-    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 12px rgba(19,254,3,.55); }
-    .status { color: var(--muted); font-size: .78rem; }
-    .status.saved { color: var(--green-soft); }
-    .status.unsaved { color: var(--warning); }
-    .editor { position: relative; }
-    textarea {
-      display: block; width: 100%; min-height: 55vh; resize: vertical; border: 0; outline: 0;
-      padding: 24px clamp(16px, 4vw, 42px); background: transparent; color: var(--text);
-      font-size: 1rem; line-height: 1.85; tab-size: 2; caret-color: var(--green);
-    }
-    textarea::placeholder { color: #536151; opacity: 1; }
-    textarea:focus-visible { box-shadow: inset 0 0 0 1px rgba(19,254,3,.2); }
-    .toolbar { display: flex; flex-wrap: wrap; gap: 9px; padding: 14px 16px; border-top: 1px solid var(--line); background: var(--panel-2); }
-    button {
-      border: 1px solid #355533; border-radius: 7px; padding: 9px 12px;
-      background: #101710; color: var(--text); cursor: pointer; font-size: .84rem;
-      transition: border-color .15s ease, background .15s ease, transform .15s ease;
-    }
-    button:hover { border-color: var(--green); background: #142014; }
-    button:active { transform: translateY(1px); }
-    button.primary { color: #031002; background: var(--green); border-color: var(--green); font-weight: 800; }
-    button.primary:hover { background: #6dff63; }
-    button.danger { border-color: #633a3a; color: #ffb1b1; }
-    button.danger:hover { border-color: #ff7777; background: #211010; }
-    .stats { display: flex; flex-wrap: wrap; gap: 20px; padding: 10px 16px; border-top: 1px solid #192619; color: var(--muted); font-size: .78rem; }
-    .stats strong { color: var(--text); font-weight: 500; }
-    .note {
-      margin-top: 18px; padding: 14px 16px; border-left: 2px solid var(--green);
-      background: rgba(19,254,3,.045); color: var(--muted); font-size: .82rem;
-    }
-    .note strong { color: var(--green-soft); font-weight: 600; }
-    footer { padding: 20px 0 30px; border-top: 1px solid #192619; color: var(--muted); font-size: .75rem; }
-    .footer-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 20px; }
-    @media (max-width: 640px) {
-      .topbar { align-items: flex-start; flex-direction: column; gap: 8px; }
-      nav { gap: 14px; }
-      main { padding-top: 28px; }
-      textarea { min-height: 58vh; padding: 18px 16px; }
-      .editor-head { align-items: flex-start; flex-direction: column; }
-    }
+    body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 20; background: repeating-linear-gradient(to bottom, transparent 0, transparent 3px, rgba(0,0,0,.12) 4px); opacity: .28; }
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+    strong { color: var(--accent); }
+    ::selection { color: #000; background: var(--accent); }
+    .container { width: min(1160px, calc(100% - 40px)); margin-inline: auto; }
+    header { position: sticky; top: 0; z-index: 15; background: rgba(5,8,5,.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); box-shadow: 0 3px 25px rgba(0,0,0,.4); }
+    .navbar { min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--accent); font: 23px var(--font-display); white-space: nowrap; text-shadow: 0 0 12px var(--accent-glow); }
+    .brand img { width: 29px; height: 29px; object-fit: contain; filter: drop-shadow(0 0 5px var(--accent-glow)); }
+    .brand span span { color: var(--text); }
+    nav { display: flex; gap: 22px; align-items: center; }
+    nav a { color: var(--muted); font-size: 12px; }
+    nav a::before { content: "./"; color: var(--accent); opacity: .65; }
+    nav a:hover, nav a[aria-current="page"] { color: var(--accent); }
+    main { flex: 1; }
+    .page-intro { padding: 60px 0 34px; }
+    .eyebrow { color: var(--accent); font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 13px; }
+    .eyebrow::before { content: "[ "; color: var(--muted); }
+    .eyebrow::after { content: " ]"; color: var(--muted); }
+    h1 { color: var(--text); font: clamp(42px, 7vw, 70px)/1.05 var(--font-display); margin-bottom: 18px; }
+    h1 span { color: var(--accent); text-shadow: 0 0 20px var(--accent-glow); }
+    .intro-copy { color: var(--muted); max-width: 760px; }
+    .intro-copy::before { content: "> "; color: var(--accent); }
+    .layout { display: grid; grid-template-columns: minmax(250px, 330px) minmax(0, 1fr); gap: 22px; padding-bottom: 58px; align-items: start; }
+    .panel { background: rgba(9,14,9,.94); border: 1px solid var(--border); border-radius: 3px; min-width: 0; }
+    .panel-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--border); }
+    .panel-heading h2 { color: var(--accent); font: 21px var(--font-display); }
+    .panel-heading h2::before { content: "# "; color: var(--muted); }
+    .count { color: var(--muted); font-size: 10px; white-space: nowrap; }
+    .search-wrap { padding: 12px; border-bottom: 1px solid var(--border); }
+    .search-wrap input { width: 100%; background: #050805; border: 1px solid var(--border); border-radius: 2px; color: var(--text); padding: 10px 11px; font: 11px var(--font-main); }
+    .search-wrap input::placeholder { color: #667363; }
+    .post-list { list-style: none; }
+    .post-list li + li { border-top: 1px solid rgba(24,51,24,.7); }
+    .post-link { display: block; padding: 15px 17px 16px; border-left: 3px solid transparent; transition: background .15s ease, border-color .15s ease; }
+    .post-link:hover { background: var(--surface-hover); }
+    .post-link[aria-current="page"] { background: var(--accent-soft); border-left-color: var(--accent); }
+    .post-link-title { display: block; color: var(--text); font: 20px/1.3 var(--font-display); margin-bottom: 6px; overflow-wrap: anywhere; }
+    .post-link[aria-current="page"] .post-link-title, .post-link:hover .post-link-title { color: var(--accent); }
+    .post-meta { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 9px; text-transform: uppercase; letter-spacing: .6px; }
+    .post-excerpt { color: var(--muted); font-size: 11px; line-height: 1.7; margin-top: 8px; }
+    .empty-list { color: var(--muted); padding: 20px 17px; font-size: 11px; }
+    .empty-list strong { display: block; margin-bottom: 6px; }
+    .article-panel { min-height: 420px; }
+    .article-content { padding: clamp(20px, 4vw, 40px); }
+    .article-kicker { color: var(--accent); text-transform: uppercase; letter-spacing: 1px; font-size: 10px; margin-bottom: 9px; }
+    .article-content h2.article-title { color: var(--text); font: clamp(30px, 4vw, 47px)/1.15 var(--font-display); overflow-wrap: anywhere; margin-bottom: 12px; }
+    .article-byline { display: flex; flex-wrap: wrap; gap: 12px; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .5px; padding-bottom: 22px; border-bottom: 1px solid var(--border); margin-bottom: 26px; }
+    .tag { color: var(--accent); }
+    .prose { color: var(--text); font-size: 13px; line-height: 2; overflow-wrap: anywhere; }
+    .prose > * + * { margin-top: 16px; }
+    .prose h2, .prose h3, .prose h4 { color: var(--accent); font-family: var(--font-display); line-height: 1.3; margin-top: 30px; }
+    .prose h2 { font-size: 28px; }
+    .prose h3 { font-size: 23px; }
+    .prose h4 { font-size: 19px; }
+    .prose p { white-space: normal; }
+    .prose a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+    .prose ul, .prose ol { padding-left: 25px; }
+    .prose li { padding-left: 4px; }
+    .prose blockquote { border-left: 3px solid var(--accent); padding: 8px 16px; background: rgba(19,254,3,.035); color: #a7b6a2; }
+    .prose code { color: var(--accent); background: #101810; padding: 2px 5px; border: 1px solid var(--border); font-size: .92em; }
+    .prose pre { overflow-x: auto; background: #020402; border: 1px solid var(--border); padding: 15px; }
+    .prose pre code { background: none; border: 0; padding: 0; }
+    .prose hr { border: 0; border-top: 1px solid var(--border); }
+    .article-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 34px; padding-top: 17px; border-top: 1px solid var(--border); color: var(--muted); font-size: 10px; }
+    .article-footer a { color: var(--accent); }
+    .comments { margin-top: 32px; padding-top: 23px; border-top: 1px solid var(--border); }
+    .comments h3 { color: var(--accent); font: 24px var(--font-display); margin-bottom: 6px; }
+    .comments-intro { color: var(--muted); font-size: 10px; margin-bottom: 18px; }
+    .comments-setup { padding: 14px; background: rgba(19,254,3,.035); border: 1px dashed #285128; color: var(--muted); font-size: 11px; }
+    .comments-setup a { color: var(--accent); text-decoration: underline; }
+    .loading, .error, .no-post { padding: 28px; color: var(--muted); }
+    .error { color: #ff8f8f; }
+    .no-post h2 { font: 30px var(--font-display); color: var(--accent); margin-bottom: 12px; }
+    .no-post p + p { margin-top: 12px; }
+    .no-post code { color: var(--accent); }
+    footer { border-top: 1px solid var(--border); padding: 22px 0; background: rgba(0,0,0,.2); }
+    .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    footer p, footer a { color: #61705d; font-size: 10px; }
+    footer a:hover { color: var(--accent); }
+    .status { display: flex; gap: 8px; align-items: center; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 9px var(--accent-glow); }
+    @media (max-width: 780px) { .layout { grid-template-columns: 1fr; } .post-list { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); } .post-list li + li { border-top: 0; } .post-list li { border-bottom: 1px solid rgba(24,51,24,.7); } .post-list li:nth-child(odd) { border-right: 1px solid rgba(24,51,24,.7); } .article-panel { min-height: 0; } }
+    @media (max-width: 520px) { .container { width: min(100% - 28px, 1160px); } .navbar { min-height: 64px; gap: 10px; } .brand { font-size: 19px; gap: 7px; } .brand img { width: 25px; height: 25px; } nav { gap: 12px; } nav a { font-size: 10px; } .page-intro { padding-top: 42px; } .post-list { grid-template-columns: 1fr; } .post-list li:nth-child(odd) { border-right: 0; } .post-list li + li { border-top: 1px solid rgba(24,51,24,.7); } .article-content { padding: 21px 17px; } .footer-content { align-items: flex-start; flex-direction: column; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition-duration: .01ms !important; } }
   </style>
 </head>
 <body>
   <header>
-    <div class="wrap topbar">
-      <a class="brand" href="/">MOBNEUTRALIZER<span>.COM</span></a>
+    <div class="container navbar">
+      <a class="brand" href="/" aria-label="mobneutralizer home">
+        <img src="/favicon.png" alt="" width="29" height="29">
+        <span>mobneutralizer<span>?</span></span>
+      </a>
       <nav aria-label="Main navigation">
-        <a href="/">home</a>
         <a href="/portfolio/">portfolio</a>
-        <a href="#editor">manifesto editor</a>
+        <a href="/manifesto/" aria-current="page">manifesto</a>
       </nav>
     </div>
   </header>
 
-  <main class="wrap">
-    <div class="eyebrow">/ personal archive / writing tool</div>
-    <h1>Manifesto<span style="color:var(--green)">_</span></h1>
-    <p class="lede">A place to get the ideas down, organize the argument, and keep revising until every sentence says what you mean.</p>
-
-    <section class="editor-shell" id="editor" aria-label="Manifesto editor">
-      <div class="editor-head">
-        <div class="file-label"><span class="dot" aria-hidden="true"></span><span>manifesto.md</span></div>
-        <div class="status" id="save-status" role="status" aria-live="polite">Local draft ready</div>
-      </div>
-      <div class="editor">
-        <label for="manifesto-text" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Write your manifesto</label>
-        <textarea id="manifesto-text" spellcheck="true" placeholder="# Title
-
-Start writing here...
-
-You can use Markdown-style headings, lists, and paragraphs. Your draft is saved in this browser as you type."></textarea>
-      </div>
-      <div class="stats" aria-live="polite">
-        <span>WORDS <strong id="word-count">0</strong></span>
-        <span>CHARACTERS <strong id="char-count">0</strong></span>
-        <span>LINES <strong id="line-count">1</strong></span>
-      </div>
-      <div class="toolbar">
-        <button type="button" class="primary" id="download-md">Download .md</button>
-        <button type="button" id="download-txt">Download .txt</button>
-        <button type="button" id="copy-draft">Copy draft</button>
-        <button type="button" id="print-draft">Print</button>
-        <button type="button" class="danger" id="clear-draft">Clear draft</button>
-      </div>
+  <main class="container">
+    <section class="page-intro" aria-labelledby="page-title">
+      <p class="eyebrow">personal doctrine / public thoughts</p>
+      <h1 id="page-title">the <span>manifesto</span></h1>
+      <p class="intro-copy">A place to put ideas, opinions, principles, rants, revisions, and whatever else seems worth writing down. Posts are stored in a JSON file; this page just reads and displays them.</p>
     </section>
 
-    <aside class="note">
-      <strong>Local-first:</strong> your writing is saved automatically in this browser on this device. It is not uploaded to a server by this page. Download a Markdown or text copy regularly if you want a backup, or to move the draft to another device.
-    </aside>
+    <div class="layout">
+      <aside class="panel" aria-label="Manifesto posts">
+        <div class="panel-heading">
+          <h2>Entries</h2>
+          <span class="count" id="post-count">LOADING</span>
+        </div>
+        <div class="search-wrap">
+          <input id="post-search" type="search" placeholder="Search entries..." aria-label="Search manifesto entries">
+        </div>
+        <ul class="post-list" id="post-list">
+          <li class="loading">Loading posts...</li>
+        </ul>
+      </aside>
+
+      <section class="panel article-panel" aria-live="polite" aria-label="Selected manifesto entry">
+        <div id="article-view" class="loading">Loading manifesto...</div>
+      </section>
+    </div>
   </main>
 
   <footer>
-    <div class="wrap footer-inner">
-      <span>© <span id="year"></span> MobNeutralizer</span>
-      <span>Draft locally. Think clearly. Revise relentlessly.</span>
+    <div class="container footer-content">
+      <p>&copy; <span id="year"></span> mobneutralizer. Opinions may be revised without notice.</p>
+      <div class="status"><span class="status-dot" aria-hidden="true"></span><p>Thoughts loaded from JSON</p></div>
     </div>
   </footer>
 
   <script>
-    (() => {
-      const STORAGE_KEY = 'mobneutralizer.manifesto.draft.v1';
-      const editor = document.getElementById('manifesto-text');
-      const status = document.getElementById('save-status');
-      const wordCount = document.getElementById('word-count');
-      const charCount = document.getElementById('char-count');
-      const lineCount = document.getElementById('line-count');
-      let statusTimer;
+    /*
+      GISCUS SETUP:
+      1. Enable Discussions on your public website repository.
+      2. Install the Giscus GitHub App on that repository.
+      3. Visit https://giscus.app, select your repo and a discussion category.
+      4. Copy the repo, repoId, category, and categoryId values below.
+      Until those values are set, the post reader works but comments show setup instructions.
+    */
+    const GISCUS_CONFIG = {
+      repo: "YOUR_GITHUB_USERNAME/YOUR_WEBSITE_REPOSITORY",
+      repoId: "YOUR_REPOSITORY_ID",
+      category: "Comments",
+      categoryId: "YOUR_CATEGORY_ID"
+    };
 
-      function updateCounts() {
-        const text = editor.value;
-        const trimmed = text.trim();
-        wordCount.textContent = trimmed ? trimmed.split(/\s+/u).length.toLocaleString() : '0';
-        charCount.textContent = text.length.toLocaleString();
-        lineCount.textContent = (text.match(/\n/g) || []).length + 1;
-      }
+    const listEl = document.getElementById("post-list");
+    const articleEl = document.getElementById("article-view");
+    const countEl = document.getElementById("post-count");
+    const searchEl = document.getElementById("post-search");
+    let posts = [];
+    let activeSlug = null;
 
-      function setStatus(message, kind = 'saved') {
-        status.textContent = message;
-        status.className = `status ${kind}`;
-      }
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-      function saveDraft() {
-        try {
-          localStorage.setItem(STORAGE_KEY, editor.value);
-          setStatus('Saved locally · ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}));
-        } catch (error) {
-          setStatus('Could not save locally — download a backup', 'unsaved');
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[char]);
+    }
+
+    function inlineMarkdown(text) {
+      let safe = escapeHTML(text);
+      const protectedCode = [];
+      safe = safe.replace(/`([^`]+)`/g, (_, code) => {
+        const token = `@@INLINECODE${protectedCode.length}@@`;
+        protectedCode.push(`<code>${code}</code>`);
+        return token;
+      });
+      safe = safe.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_, label, url) =>
+        `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`
+      );
+      safe = safe.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+      safe = safe.replace(/~~(.+?)~~/g, "<del>$1</del>");
+      safe = safe.replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>");
+      safe = safe.replace(/@@INLINECODE(\d+)@@/g, (_, index) => protectedCode[Number(index)]);
+      return safe;
+    }
+
+    // A deliberately small Markdown renderer. Raw HTML in JSON is escaped, not executed.
+    function renderMarkdown(markdown) {
+      const lines = String(markdown ?? "").replace(/\r\n?/g, "\n").split("\n");
+      const out = [];
+      let paragraph = [];
+      let listType = null;
+      let codeLines = null;
+      const flushParagraph = () => {
+        if (paragraph.length) {
+          out.push(`<p>${paragraph.map(inlineMarkdown).join("<br>")}</p>`);
+          paragraph = [];
         }
-        updateCounts();
+      };
+      const closeList = () => {
+        if (listType) { out.push(`</${listType}>`); listType = null; }
+      };
+      for (const line of lines) {
+        if (line.trim().startsWith("```")) {
+          flushParagraph(); closeList();
+          if (codeLines === null) codeLines = [];
+          else { out.push(`<pre><code>${escapeHTML(codeLines.join("\n"))}</code></pre>`); codeLines = null; }
+          continue;
+        }
+        if (codeLines !== null) { codeLines.push(line); continue; }
+        if (!line.trim()) { flushParagraph(); closeList(); continue; }
+        const heading = /^(#{1,4})\s+(.+)$/.exec(line);
+        if (heading) {
+          flushParagraph(); closeList();
+          const level = heading[1].length + 1;
+          out.push(`<h${level}>${inlineMarkdown(heading[2])}</h${level}>`);
+          continue;
+        }
+        if (/^\s*([-*_])\s*\1\s*\1\s*$/.test(line)) { flushParagraph(); closeList(); out.push("<hr>"); continue; }
+        const quote = /^>\s?(.*)$/.exec(line);
+        if (quote) { flushParagraph(); closeList(); out.push(`<blockquote>${inlineMarkdown(quote[1])}</blockquote>`); continue; }
+        const unordered = /^\s*[-*+]\s+(.+)$/.exec(line);
+        const ordered = /^\s*\d+\.\s+(.+)$/.exec(line);
+        if (unordered || ordered) {
+          flushParagraph();
+          const wanted = unordered ? "ul" : "ol";
+          if (listType !== wanted) { closeList(); out.push(`<${wanted}>`); listType = wanted; }
+          out.push(`<li>${inlineMarkdown((unordered || ordered)[1])}</li>`);
+          continue;
+        }
+        closeList(); paragraph.push(line);
       }
+      if (codeLines !== null) out.push(`<pre><code>${escapeHTML(codeLines.join("\n"))}</code></pre>`);
+      flushParagraph(); closeList();
+      return out.join("\n");
+    }
 
-      function download(content, filename, type) {
-        const blob = new Blob([content], {type});
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    function formatDate(value) {
+      if (!value) return "UNDATED";
+      const parsed = new Date(`${value}T12:00:00`);
+      if (Number.isNaN(parsed.getTime())) return escapeHTML(value);
+      return parsed.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" }).toUpperCase();
+    }
+
+    function sortPosts(items) {
+      return [...items].sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")) || String(a.title || "").localeCompare(String(b.title || "")));
+    }
+
+    function filteredPosts() {
+      const query = searchEl.value.trim().toLowerCase();
+      if (!query) return posts;
+      return posts.filter(post => [post.title, post.category, post.excerpt, post.content].join(" ").toLowerCase().includes(query));
+    }
+
+    function renderPostList() {
+      const visible = filteredPosts();
+      countEl.textContent = `${visible.length} / ${posts.length} POSTS`;
+      if (!posts.length) {
+        listEl.innerHTML = `<li class="empty-list"><strong>NO ENTRIES YET.</strong>Add your first post to <code>manifesto/posts.json</code>. No HTML editing required.</li>`;
+        return;
       }
+      if (!visible.length) {
+        listEl.innerHTML = `<li class="empty-list">No posts match that search.</li>`;
+        return;
+      }
+      listEl.innerHTML = visible.map(post => `
+        <li><a class="post-link" href="#${encodeURIComponent(post.slug)}" ${post.slug === activeSlug ? 'aria-current="page"' : ""}>
+          <span class="post-link-title">${escapeHTML(post.title)}</span>
+          <span class="post-meta"><span>${formatDate(post.date)}</span>${post.category ? `<span>• ${escapeHTML(post.category)}</span>` : ""}</span>
+          ${post.excerpt ? `<span class="post-excerpt">${escapeHTML(post.excerpt)}</span>` : ""}
+        </a></li>`).join("");
+    }
 
+    function commentsSetupNeeded() {
+      return !GISCUS_CONFIG.repo || GISCUS_CONFIG.repo.includes("YOUR_") || !GISCUS_CONFIG.repoId || GISCUS_CONFIG.repoId.includes("YOUR_") || !GISCUS_CONFIG.category || !GISCUS_CONFIG.categoryId || GISCUS_CONFIG.categoryId.includes("YOUR_");
+    }
+
+    function loadComments(post) {
+      const holder = document.getElementById("giscus-container");
+      if (!holder) return;
+      holder.replaceChildren();
+      if (commentsSetupNeeded()) {
+        holder.innerHTML = `<div class="comments-setup">Comments are ready to configure, but Giscus has not been connected yet. Follow the <a href="https://giscus.app/" target="_blank" rel="noopener noreferrer">Giscus setup</a> steps in <code>manifesto/README.md</code>, then fill in the four settings near the top of this page's JavaScript. Each post will get its own discussion.</div>`;
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = "https://giscus.app/client.js";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      const attrs = {
+        "data-repo": GISCUS_CONFIG.repo,
+        "data-repo-id": GISCUS_CONFIG.repoId,
+        "data-category": GISCUS_CONFIG.category,
+        "data-category-id": GISCUS_CONFIG.categoryId,
+        "data-mapping": "specific",
+        "data-term": `manifesto-${post.slug}`,
+        "data-strict": "1",
+        "data-reactions-enabled": "1",
+        "data-emit-metadata": "0",
+        "data-input-position": "top",
+        "data-theme": "dark",
+        "data-lang": "en"
+      };
+      Object.entries(attrs).forEach(([name, value]) => script.setAttribute(name, value));
+      holder.appendChild(script);
+    }
+
+    function renderEmptyArticle() {
+      articleEl.innerHTML = `<div class="no-post"><p class="article-kicker">SYSTEM STATUS: EMPTY</p><h2>No thoughts published yet.</h2><p>This page reads <code>manifesto/posts.json</code>. Add an object to its <code>posts</code> array and your entry will appear here automatically after you commit the file.</p><p>Each entry can have a title, slug, date, category, excerpt, and Markdown content. See <code>manifesto/README.md</code> for a copy-paste example.</p></div>`;
+    }
+
+    function renderArticle() {
+      let slug = decodeURIComponent(location.hash.slice(1));
+      let post = posts.find(item => item.slug === slug);
+      if (!slug && posts.length) post = posts[0];
+      if (!post) {
+        activeSlug = null;
+        renderPostList();
+        if (posts.length) {
+          articleEl.innerHTML = `<div class="no-post"><p class="article-kicker">ENTRY NOT FOUND</p><h2>That page doesn't exist.</h2><p>Choose an entry from the list, or check the URL fragment.</p></div>`;
+        } else renderEmptyArticle();
+        return;
+      }
+      activeSlug = post.slug;
+      renderPostList();
+      articleEl.innerHTML = `
+        <article class="article-content">
+          <p class="article-kicker">MANIFESTO ENTRY // ${escapeHTML(post.slug)}</p>
+          <h2 class="article-title">${escapeHTML(post.title)}</h2>
+          <div class="article-byline"><span>${formatDate(post.date)}</span>${post.category ? `<span class="tag">${escapeHTML(post.category)}</span>` : ""}<span>BY MOBNEUTRALIZER</span></div>
+          <div class="prose">${renderMarkdown(post.content)}</div>
+          <div class="article-footer"><span>END OF ENTRY</span><a href="#${encodeURIComponent(post.slug)}" onclick="event.preventDefault(); window.scrollTo({top:0,behavior:'smooth'})">Back to top ↑</a></div>
+          <section class="comments" aria-label="Comments">
+            <h3>Discussion</h3>
+            <p class="comments-intro">Argue with the ideas, add context, or leave a response. Keep it civil enough to be readable.</p>
+            <div id="giscus-container"><div class="comments-setup">Loading comment system…</div></div>
+          </section>
+        </article>`;
+      loadComments(post);
+    }
+
+    async function init() {
       try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved !== null) {
-          editor.value = saved;
-          setStatus('Restored local draft', 'saved');
-        }
+        const response = await fetch("./posts.json", { cache: "no-store" });
+        if (!response.ok) throw new Error(`posts.json returned HTTP ${response.status}`);
+        const data = await response.json();
+        if (!data || !Array.isArray(data.posts)) throw new Error('posts.json must contain a "posts" array.');
+        const seen = new Set();
+        posts = sortPosts(data.posts.filter(post => {
+          if (!post || typeof post.title !== "string" || typeof post.slug !== "string" || typeof post.content !== "string") return false;
+          if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(post.slug) || seen.has(post.slug)) return false;
+          seen.add(post.slug);
+          return true;
+        }));
+        renderArticle();
       } catch (error) {
-        setStatus('Browser storage unavailable — download backups', 'unsaved');
+        countEl.textContent = "ERROR";
+        listEl.innerHTML = `<li class="error">Couldn't load posts.json.</li>`;
+        articleEl.innerHTML = `<div class="error"><strong>MANIFESTO DATA ERROR</strong><p>${escapeHTML(error.message)}</p><p>Check that <code>posts.json</code> is beside <code>index.html</code> and contains valid JSON.</p></div>`;
       }
-      updateCounts();
+    }
 
-      editor.addEventListener('input', () => {
-        setStatus('Saving…', 'unsaved');
-        updateCounts();
-        clearTimeout(statusTimer);
-        statusTimer = setTimeout(saveDraft, 180);
-      });
-
-      document.getElementById('download-md').addEventListener('click', () => {
-        download(editor.value, 'manifesto.md', 'text/markdown;charset=utf-8');
-      });
-      document.getElementById('download-txt').addEventListener('click', () => {
-        download(editor.value, 'manifesto.txt', 'text/plain;charset=utf-8');
-      });
-      document.getElementById('copy-draft').addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(editor.value);
-          setStatus('Draft copied to clipboard', 'saved');
-        } catch (error) {
-          editor.focus();
-          editor.select();
-          setStatus('Press Ctrl+C / ⌘C to copy the selected draft', 'unsaved');
-        }
-      });
-      document.getElementById('print-draft').addEventListener('click', () => {
-        const printWindow = window.open('', '_blank', 'width=850,height=700');
-        if (!printWindow) {
-          setStatus('Popup blocked — allow popups to print', 'unsaved');
-          return;
-        }
-        const escaped = editor.value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        printWindow.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Manifesto draft</title><style>body{max-width:800px;margin:50px auto;padding:0 24px;color:#111;font:16px/1.7 Georgia,serif}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}</style></head><body><pre>' + escaped + '</pre></body></html>');
-        printWindow.document.close();
-        printWindow.focus();
-        printWindow.print();
-      });
-      document.getElementById('clear-draft').addEventListener('click', () => {
-        if (!confirm('Clear this manifesto draft from this browser? Download a backup first if you need one.')) return;
-        editor.value = '';
-        try { localStorage.removeItem(STORAGE_KEY); } catch (error) { /* storage may be disabled */ }
-        updateCounts();
-        setStatus('Draft cleared', 'saved');
-        editor.focus();
-      });
-      document.getElementById('year').textContent = new Date().getFullYear();
-    })();
+    searchEl.addEventListener("input", renderPostList);
+    window.addEventListener("hashchange", renderArticle);
+    init();
   </script>
 </body>
 </html>

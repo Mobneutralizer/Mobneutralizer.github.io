@@ -139,6 +139,10 @@
             color: var(--text);
         }
 
+        .brand-prompt span {
+            color: var(--accent);
+        }
+
         nav {
             display: flex;
             gap: 24px;
@@ -520,6 +524,11 @@
             section {
                 padding: 38px 0;
             }
+
+            .footer-content {
+                align-items: flex-start;
+                flex-direction: column;
+            }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -549,8 +558,7 @@
             </a>
 
             <nav aria-label="Main navigation">
-                <a href="#projects">Projects</a>
-                <a href="#about">About</a>
+                <a href="/portfolio/">portfolio</a>
             </nav>
         </div>
     </header>
@@ -571,8 +579,8 @@
                 </p>
 
                 <div class="hero-actions">
-                    <a class="button button-primary" href="#projects">
-                        Explore my projects
+                    <a class="button button-primary" href="/portfolio/">
+                        ./portfolio →
                     </a>
 
                     <a class="button button-secondary"
@@ -592,7 +600,7 @@
 
                 <div class="projects">
                     <a class="project-card"
-                       href="https://calixas.mobneutralizer.com">
+                       href="https://calixas.mobneutralizer.com/">
                         <span class="project-label">inside joke you aint gonna get</span>
                         <h3>Calixas</h3>
                         <p>
@@ -603,15 +611,17 @@
                         </span>
                     </a>
 
-                    <div class="project-card">
-                        <span class="project-label">stuff i need to do</span>
-                        <h3>More coming soon</h3>
+                    <a class="project-card" href="/portfolio/">
+                        <span class="project-label">media archive</span>
+                        <h3>Portfolio</h3>
                         <p>
-                            so like i havent actually done anything else
-                            im a bit lazy
+                            videos, pictures, projects, and assorted creations.
+                            One directory. Questionable contents.
                         </p>
-                        <span class="project-link">Work in progress</span>
-                    </div>
+                        <span class="project-link">
+                            Open portfolio <span>→</span>
+                        </span>
+                    </a>
                 </div>
             </section>
 

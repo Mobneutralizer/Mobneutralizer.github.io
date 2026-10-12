@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070907">
+  <meta name="description" content="A private, local-first writing space for drafting a manifesto.">
+  <title>Manifesto // Draft Space</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #070907;
+      --panel: #0c100c;
+      --panel-2: #101610;
+      --green: #13fe03;
+      --green-soft: #a1ff9a;
+      --text: #e4eee2;
+      --muted: #839082;
+      --line: #244022;
+      --warning: #d4ed87;
+      --radius: 10px;
+    }
+    * { box-sizing: border-box; }
+    html { min-height: 100%; background: var(--bg); }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 50% -10%, rgba(19,254,3,.09), transparent 44%),
+        var(--bg);
+      font-family: "Fira Code", "Cascadia Code", Consolas, "Courier New", monospace;
+      line-height: 1.6;
+    }
+    a { color: var(--green); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    button, textarea { font: inherit; }
+    .wrap { width: min(1100px, calc(100% - 32px)); margin: 0 auto; }
+    header {
+      border-bottom: 1px solid var(--line);
+      background: rgba(7,9,7,.88);
+    }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 20px; min-height: 66px; flex-wrap: wrap; padding: 10px 0;
+    }
+    .brand { font-weight: 800; letter-spacing: .06em; color: var(--green); }
+    .brand span { color: var(--muted); font-weight: 400; }
+    nav { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; font-size: .9rem; }
+    main { padding: 38px 0 56px; }
+    .eyebrow { color: var(--green); font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; }
+    h1 { margin: 8px 0 4px; font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.1; letter-spacing: -.055em; }
+    .lede { margin: 12px 0 28px; color: var(--muted); max-width: 740px; }
+    .editor-shell { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--panel); box-shadow: 0 18px 70px rgba(0,0,0,.28); }
+    .editor-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--panel-2); flex-wrap: wrap;
+    }
+    .file-label { display: flex; align-items: center; gap: 10px; font-size: .9rem; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 12px rgba(19,254,3,.55); }
+    .status { color: var(--muted); font-size: .78rem; }
+    .status.saved { color: var(--green-soft); }
+    .status.unsaved { color: var(--warning); }
+    .editor { position: relative; }
+    textarea {
+      display: block; width: 100%; min-height: 55vh; resize: vertical; border: 0; outline: 0;
+      padding: 24px clamp(16px, 4vw, 42px); background: transparent; color: var(--text);
+      font-size: 1rem; line-height: 1.85; tab-size: 2; caret-color: var(--green);
+    }
+    textarea::placeholder { color: #536151; opacity: 1; }
+    textarea:focus-visible { box-shadow: inset 0 0 0 1px rgba(19,254,3,.2); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 9px; padding: 14px 16px; border-top: 1px solid var(--line); background: var(--panel-2); }
+    button {
+      border: 1px solid #355533; border-radius: 7px; padding: 9px 12px;
+      background: #101710; color: var(--text); cursor: pointer; font-size: .84rem;
+      transition: border-color .15s ease, background .15s ease, transform .15s ease;
+    }
+    button:hover { border-color: var(--green); background: #142014; }
+    button:active { transform: translateY(1px); }
+    button.primary { color: #031002; background: var(--green); border-color: var(--green); font-weight: 800; }
+    button.primary:hover { background: #6dff63; }
+    button.danger { border-color: #633a3a; color: #ffb1b1; }
+    button.danger:hover { border-color: #ff7777; background: #211010; }
+    .stats { display: flex; flex-wrap: wrap; gap: 20px; padding: 10px 16px; border-top: 1px solid #192619; color: var(--muted); font-size: .78rem; }
+    .stats strong { color: var(--text); font-weight: 500; }
+    .note {
+      margin-top: 18px; padding: 14px 16px; border-left: 2px solid var(--green);
+      background: rgba(19,254,3,.045); color: var(--muted); font-size: .82rem;
+    }
+    .note strong { color: var(--green-soft); font-weight: 600; }
+    footer { padding: 20px 0 30px; border-top: 1px solid #192619; color: var(--muted); font-size: .75rem; }
+    .footer-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 20px; }
+    @media (max-width: 640px) {
+      .topbar { align-items: flex-start; flex-direction: column; gap: 8px; }
+      nav { gap: 14px; }
+      main { padding-top: 28px; }
+      textarea { min-height: 58vh; padding: 18px 16px; }
+      .editor-head { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap topbar">
+      <a class="brand" href="/">MOBNEUTRALIZER<span>.COM</span></a>
+      <nav aria-label="Main navigation">
+        <a href="/">home</a>
+        <a href="/portfolio/">portfolio</a>
+        <a href="#editor">manifesto editor</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="eyebrow">/ personal archive / writing tool</div>
+    <h1>Manifesto<span style="color:var(--green)">_</span></h1>
+    <p class="lede">A place to get the ideas down, organize the argument, and keep revising until every sentence says what you mean.</p>
+
+    <section class="editor-shell" id="editor" aria-label="Manifesto editor">
+      <div class="editor-head">
+        <div class="file-label"><span class="dot" aria-hidden="true"></span><span>manifesto.md</span></div>
+        <div class="status" id="save-status" role="status" aria-live="polite">Local draft ready</div>
+      </div>
+      <div class="editor">
+        <label for="manifesto-text" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">Write your manifesto</label>
+        <textarea id="manifesto-text" spellcheck="true" placeholder="# Title
+
+Start writing here...
+
+You can use Markdown-style headings, lists, and paragraphs. Your draft is saved in this browser as you type."></textarea>
+      </div>
+      <div class="stats" aria-live="polite">
+        <span>WORDS <strong id="word-count">0</strong></span>
+        <span>CHARACTERS <strong id="char-count">0</strong></span>
+        <span>LINES <strong id="line-count">1</strong></span>
+      </div>
+      <div class="toolbar">
+        <button type="button" class="primary" id="download-md">Download .md</button>
+        <button type="button" id="download-txt">Download .txt</button>
+        <button type="button" id="copy-draft">Copy draft</button>
+        <button type="button" id="print-draft">Print</button>
+        <button type="button" class="danger" id="clear-draft">Clear draft</button>
+      </div>
+    </section>
+
+    <aside class="note">
+      <strong>Local-first:</strong> your writing is saved automatically in this browser on this device. It is not uploaded to a server by this page. Download a Markdown or text copy regularly if you want a backup, or to move the draft to another device.
+    </aside>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <span>© <span id="year"></span> MobNeutralizer</span>
+      <span>Draft locally. Think clearly. Revise relentlessly.</span>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const STORAGE_KEY = 'mobneutralizer.manifesto.draft.v1';
+      const editor = document.getElementById('manifesto-text');
+      const status = document.getElementById('save-status');
+      const wordCount = document.getElementById('word-count');
+      const charCount = document.getElementById('char-count');
+      const lineCount = document.getElementById('line-count');
+      let statusTimer;
+
+      function updateCounts() {
+        const text = editor.value;
+        const trimmed = text.trim();
+        wordCount.textContent = trimmed ? trimmed.split(/\s+/u).length.toLocaleString() : '0';
+        charCount.textContent = text.length.toLocaleString();
+        lineCount.textContent = (text.match(/\n/g) || []).length + 1;
+      }
+
+      function setStatus(message, kind = 'saved') {
+        status.textContent = message;
+        status.className = `status ${kind}`;
+      }
+
+      function saveDraft() {
+        try {
+          localStorage.setItem(STORAGE_KEY, editor.value);
+          setStatus('Saved locally · ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}));
+        } catch (error) {
+          setStatus('Could not save locally — download a backup', 'unsaved');
+        }
+        updateCounts();
+      }
+
+      function download(content, filename, type) {
+        const blob = new Blob([content], {type});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved !== null) {
+          editor.value = saved;
+          setStatus('Restored local draft', 'saved');
+        }
+      } catch (error) {
+        setStatus('Browser storage unavailable — download backups', 'unsaved');
+      }
+      updateCounts();
+
+      editor.addEventListener('input', () => {
+        setStatus('Saving…', 'unsaved');
+        updateCounts();
+        clearTimeout(statusTimer);
+        statusTimer = setTimeout(saveDraft, 180);
+      });
+
+      document.getElementById('download-md').addEventListener('click', () => {
+        download(editor.value, 'manifesto.md', 'text/markdown;charset=utf-8');
+      });
+      document.getElementById('download-txt').addEventListener('click', () => {
+        download(editor.value, 'manifesto.txt', 'text/plain;charset=utf-8');
+      });
+      document.getElementById('copy-draft').addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(editor.value);
+          setStatus('Draft copied to clipboard', 'saved');
+        } catch (error) {
+          editor.focus();
+          editor.select();
+          setStatus('Press Ctrl+C / ⌘C to copy the selected draft', 'unsaved');
+        }
+      });
+      document.getElementById('print-draft').addEventListener('click', () => {
+        const printWindow = window.open('', '_blank', 'width=850,height=700');
+        if (!printWindow) {
+          setStatus('Popup blocked — allow popups to print', 'unsaved');
+          return;
+        }
+        const escaped = editor.value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        printWindow.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Manifesto draft</title><style>body{max-width:800px;margin:50px auto;padding:0 24px;color:#111;font:16px/1.7 Georgia,serif}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}</style></head><body><pre>' + escaped + '</pre></body></html>');
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+      });
+      document.getElementById('clear-draft').addEventListener('click', () => {
+        if (!confirm('Clear this manifesto draft from this browser? Download a backup first if you need one.')) return;
+        editor.value = '';
+        try { localStorage.removeItem(STORAGE_KEY); } catch (error) { /* storage may be disabled */ }
+        updateCounts();
+        setStatus('Draft cleared', 'saved');
+        editor.focus();
+      });
+      document.getElementById('year').textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>

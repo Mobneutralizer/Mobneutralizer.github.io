@@ -1,14 +1,14 @@
 {
-"projects": [
-{
-"title": "The Woods",
-"description": "",
-"category": "Video",
-"videos": [
-"media/the-woods.mp4"
-],
-"images": [],
-"date": "2026"
-}
-]
+  "projects": [
+    {
+      "title": "The Woods",
+      "description": "",
+      "category": "Video",
+      "date": "2026",
+      "videos": [
+        "https://media.mobneutralizer.com/the-woods.mp4"
+      ],
+      "images": []
+    }
+  ]
 }

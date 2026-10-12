@@ -1,0 +1,38 @@
+{
+  "posts": [
+    {
+      "title": "A First issue",
+      "slug": "a-first-issue",
+      "date": "2026-10-11",
+      "category": "Principles",
+      "excerpt": "A short summary of my personal belief",
+      "content": "
+      # My Thoughts
+
+## Communism
+
+Starting off, I'll just say this: communism is actually **PRETTY GOOD** in principle. However, human nature makes it completely unobtainable. People naturally will have greed, envy, laziness, violence, etc., so if people don't work or people try to take or hoard, then the system itself falls apart, leading to communism not working.
+
+## Artificial Intelligence
+
+I think despite me being rather liberal, I am in support of AI. However, its current implementation is being done so wrong that it's sabotaging the whole technology's future.
+
+Datacenters drawing in water and occupying unnecessary space, idiots claiming to be “AI artists,” or people not getting credit, compensation, or permission for material used in training data are all problems.
+
+I feel like if they made it ethically, then it'd work. People would still dislike it; it's human nature to be scared of something new, unknown, and scary. But at least today, people have reasons to dislike it.
+
+## Open Borders
+
+I propose universal open borders, where people can pick which nation they wish to fall under. Immigration should never be punished, and if people want to move to a specific country, they should be able to.
+
+A lazy immigrant and a lazy native should be treated the same in the eyes of the law and the common populace.
+
+## Reptiles and Primates
+
+I think lizards and reptiles are cool, but as a human, I'll always be a huge fan of fellow simians.
+
+There's something so fascinating about seeing a cousin, something so similar to me, yet distinctly unique.
+"
+    }
+  ]
+}
